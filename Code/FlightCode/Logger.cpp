@@ -4,8 +4,8 @@
 
 #ifdef LOG_TO_SD
 //Include SD Card dirver only if SD card is used
-#include "Driver_SD_Card.h" 
-#endif 
+#include "Driver_SD_Card.h"
+#endif
 
 #define N_OF_LOG_FILEDS 20 //N fields
 
@@ -54,12 +54,12 @@ void Log_DefineNextField (String fName, String fUnit)
 {
 	if (nFields >= (N_OF_LOG_FILEDS))
 		logWrite("Too many loged fields, consider increasing N_OF_LOG_FILEDS");
-	
-	fNames = fName + " [" + fUnit + "],";
+
+	fNames += fName + " [" + fUnit + "],";
 	nFields++;
-	
+
 }
-void Log_SetData (int fI, float data) 
+void Log_SetData (int fI, float data)
 {
 	if (fI >= (N_OF_LOG_FILEDS))
 		logWrite("Too many loged fields, consider increasing N_OF_LOG_FILEDS");
@@ -79,11 +79,11 @@ void Log_WriteLogHeader () //Write log header
 
 void Log_WriteLine ()
 {
-	String message = String(timems);
-	for (int i=0;i<N_OF_LOG_FILEDS;i++)
+	String message = String(timems) + ",";
+	for (int i=0;i<nFields;i++)
 		message += String(lineData[i]) + ",";
 
-	message += lineNote;
+	message += String(logicState) + "," +lineNote;
 	logWrite(message);
 	clearLine();
 }
@@ -96,18 +96,19 @@ void Log_Test ()
 
 	logWrite("Hello World!");
 
-	for (int i=0;i<N_OF_LOG_FILEDS-1;i++)
-		Log_DefineNextField("A","m/sec");
+	Log_DefineNextField("Speed","m/sec");
+	Log_DefineNextField("Length","m");
+	Log_DefineNextField("Area","m^2");
 
 	Log_WriteLogHeader();
 
 	Log_SetTime(10);
 	Log_SetLoigcState(10);
-	for (int i=0;i<N_OF_LOG_FILEDS-1;i++)
-		Log_SetData(i,i*2.0);
+	Log_SetData(0,-1);   //Speed
+	Log_SetData(1,2.4); //Length
+	Log_SetData(2,1);  //Area
+	Log_AddNote("TestData");
 
-	Log_AddNote("Note");
 	Log_WriteLine();
 
-	//TBD: Run and see the log file is ok!
 }

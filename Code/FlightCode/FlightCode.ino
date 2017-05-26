@@ -2,7 +2,7 @@
 // Don't forget to check that all pins are assigned correctly (they currently
 // are not) and to set the experiment parameters (they currently are not).
 // Better yet, actually look through the code (especially the early variable
-// assignment parts) to make sure that things make sense before bricking your 
+// assignment parts) to make sure that things make sense before bricking your
 // device!
 ////////////////////////////////////////////////////////////////////////////////
 //General Includes
@@ -13,13 +13,13 @@
 
 //#define IS_RUN_OPERATIONAL //Comment out if you would like to run tests only
 
-void setup() 
+void setup()
 {
   Log_Init();
 }
 
 #ifdef IS_RUN_OPERATIONAL
-void loop() 
+void loop()
 {
   //Operational mode
   RunLogic();
@@ -28,10 +28,10 @@ void loop()
 
 #include "Driver_IMU.h"
 
-void loop() 
+void loop()
 {
   //Testers (uncomment if needed)
-  Log_Test();     //Not Passed Yet
+  //Log_Test();     //Passed for COM, TODO SD
   IMU_Test();     //Not Passed Yet
   //Dist_Test();    //Not Passed Yet
   //Or_Prop_Test(); //Not Passed Yet
@@ -42,4 +42,3 @@ void loop()
 }
 
 #endif
-
