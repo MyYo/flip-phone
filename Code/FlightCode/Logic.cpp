@@ -121,6 +121,7 @@ int lsStandBy(int prevLogicState)
 		IMU_GetOrientation  (q1,q2,q3,q4); //Return current orientation IF->BF
 		IMU_GetRotationRate (omegaX,omegaY,omegaZ); //Return current rotation rate
 		
+		OrProp_SetInitialConditions(tFallDetectTime_T0,q1,q2,q3,q4,omegaX,omegaY,omegaZ);
 		OrProp_Prop (2); //Propagate a little to give us some grid to start with before moving to the next step
 
 		return LS_DISTANCE_AQUISITION;
