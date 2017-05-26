@@ -5,9 +5,10 @@
 
 void Log_Init ();
 
-void Log_DefineField (int fI,String fName, String fUnit);
+void Log_DefineNextField (String fName, String fUnit); //Define header
 void Log_SetData (int fI, float data);
-void Log_SetLoigcState(int newState);
+void Log_SetLoigcState(unsigned short newState);
+void Log_SetTime(unsigned long time);
 void Log_AddNote(String note); // Can be used for warnings or errors, or just additional information
 
 void Log_WriteLogHeader (); //Write log header

@@ -25,6 +25,7 @@ void RunLogic ()
 	while(true) //Loop forever
 	{
 		tCurrentTime = millis();
+		Log_SetTime(tCurrentTime);
 
 		//Hendle logic
 		switch(currentState)
@@ -92,15 +93,13 @@ void logicGatherData ()
 int lsBootUp(int prevLogicState)
 {
 	Log_Init();
-	int i=0;
-	Log_DefineField(i,"Time","msec"); i++;
-	Log_DefineField(i,"AccMag","mg"); i++;
-	Log_DefineField(i,"ZenitAng","deg"); i++;
-	Log_DefineField(i,"omegaX","rad/sec"); i++;
-	Log_DefineField(i,"omegaY","rad/sec"); i++;
-	Log_DefineField(i,"omegaZ","rad/sec"); i++;
-	Log_DefineField(i,"DistToGND","[m]"); i++;
-	Log_DefineField(i,"DistDevice","#"); i++;
+	Log_DefineNextField("AccMag","mg"); 
+	Log_DefineNextField("ZenitAng","deg"); 
+	Log_DefineNextField("omegaX","rad/sec"); 
+	Log_DefineNextField("omegaY","rad/sec"); 
+	Log_DefineNextField("omegaZ","rad/sec"); 
+	Log_DefineNextField("DistToGND","[m]"); 
+	Log_DefineNextField("DistDevice","#");
 
 	Dist_Init();
 	IMU_Init();

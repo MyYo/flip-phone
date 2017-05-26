@@ -123,9 +123,9 @@ void IMU_Test ()
 	float dataArray[12];
 	//Initiate
 	Log_Init();
-	Log_DefineField(0,"Time","msec");
-	Log_DefineField(1,"a_x","mg");
-	Log_DefineField(1,"a_y","mg");
+	Log_DefineNextField("Time","msec");
+	Log_DefineNextField("a_x","mg");
+	Log_DefineNextField("a_y","mg");
 	//... TBD Add more fields
 	Log_WriteLogHeader();
 	IMU_Init();
