@@ -101,28 +101,27 @@ void IMU_GetRotationRate (float &omegaX,float &omegaY,float &omegaZ)
 
 void IMU_ExportData(float dataArray[])
 {
-	dataArray[0] = myIMU.delt_t;
-	dataArray[1] = myIMU.ax;
-	dataArray[2] = myIMU.ay;
-	dataArray[3] = myIMU.az;
-	dataArray[4] = IMU_GetAccMag();
-	dataArray[5] = myIMU.gx;
-	dataArray[6] = myIMU.gy;
-	dataArray[7] = myIMU.gz;
-	dataArray[8] = myIMU.mx;
-	dataArray[9] = myIMU.my;
-	dataArray[10] = myIMU.mz;
-	dataArray[11] = IMU_GetZenitAngle();
+	int i=0;
+	dataArray[i] = myIMU.ax; i++;
+	dataArray[i] = myIMU.ay; i++;
+	dataArray[i] = myIMU.az; i++;
+	dataArray[i] = IMU_GetAccMag(); i++;
+	dataArray[i] = myIMU.gx; i++;
+	dataArray[i] = myIMU.gy; i++;
+	dataArray[i] = myIMU.gz; i++;
+	dataArray[i] = myIMU.mx; i++;
+	dataArray[i] = myIMU.my; i++;
+	dataArray[i] = myIMU.mz; i++;
+	dataArray[i] = IMU_GetZenitAngle(); i++;
 }
 
 //This function implements the IMU tester configuration
 //The idea is we will run the IMU_Test function instead of the logic, it will spit out data while we rotate the IMU to different orientations and see data matches our estimates
 #include "Logger.h"
-void IMU_TestInit ()
+void IMU_TestLogInit ()
 {
 	//Initiate
 	Log_Init();
-	Log_DefineNextField("deltat","s");
 	Log_DefineNextField("a_x","mg");
 	Log_DefineNextField("a_y","mg");
 	Log_DefineNextField("a_z","mg");
@@ -133,24 +132,24 @@ void IMU_TestInit ()
 	Log_DefineNextField("m_x","mg");
 	Log_DefineNextField("m_y","mg");
 	Log_DefineNextField("m_z","mg");
-	Log_DefineNextField("z_ang","mg");
-	//... TBD Add more fields
+	Log_DefineNextField("z_ang","deg");
+
 	Log_WriteLogHeader();
-	//IMU_Init();
 }
 void IMU_Test ()
 {
-	IMU_TestInit();
+	IMU_TestLogInit();
+	IMU_Init();
 
-	float dataArray[12];
-	// while (true) //Loop forever
+	float dataArray[11];
+	//while (true) //Loop forever
 	// {
 	// 	//Read IMU and log values
 	// 	//Log_SetTime(millis());
 	// 	// IMU_Measure();
 	// 	//
 	// 	// IMU_ExportData(dataArray);
-	// 	// for(int i=0;i<12;i++)
+	// 	// for(int i=0;i<11;i++)
 	// 	// 	Log_SetData(i,dataArray[i]);
 	//
 	// 	//Log

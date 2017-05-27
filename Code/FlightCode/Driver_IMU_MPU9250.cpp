@@ -147,6 +147,7 @@ void MPU9250::initAK8963(float * destination)
 
 void MPU9250::initMPU9250()
 {  
+	
  // wake up device
   writeByte(MPU9250_ADDRESS, PWR_MGMT_1, 0x00); // Clear sleep mode bit (6), enable all sensors 
   delay(100); // Wait for all registers to reset 

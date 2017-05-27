@@ -9,7 +9,6 @@
 
 #include "HardwareConfiguration.h"
 #include "Logger.h"
-#include "Logic.h"
 
 //#define IS_RUN_OPERATIONAL //Comment out if you would like to run tests only
 
@@ -19,6 +18,8 @@ void setup()
 }
 
 #ifdef IS_RUN_OPERATIONAL
+#include "Logic.h"
+
 void loop()
 {
   //Operational mode

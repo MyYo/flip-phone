@@ -9,6 +9,9 @@
 #define PIN_SD_CHIP_SELECT		5
 #define PIN_PING_DOWNFACING		1
 #define PIN_PING_UPFACING		1
+#define PIN_I2C_SCL				A5  //Used by IMU
+#define PIN_I2C_SDA				A4  //Used by IMU
+
 
 //Select whether to log data through the com connection or SD card
 #define LOG_TO_COM
