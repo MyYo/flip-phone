@@ -18,22 +18,22 @@ void IMU_Measure()
 	{
 		myIMU.readAccelData(myIMU.accelCount);  // Read the x/y/z adc values
         myIMU.getAres();
-    
+
         // Now we'll calculate the accleration value into actual g's
         // This depends on scale being set
         myIMU.ax = (float)myIMU.accelCount[0]*myIMU.aRes; // - accelBias[0];
         myIMU.ay = (float)myIMU.accelCount[1]*myIMU.aRes; // - accelBias[1];
         myIMU.az = (float)myIMU.accelCount[2]*myIMU.aRes; // - accelBias[2];
-    
+
         myIMU.readGyroData(myIMU.gyroCount);  // Read the x/y/z adc values
         myIMU.getGres();
-    
+
         // Calculate the gyro value into actual degrees per second
         // This depends on scale being set
         myIMU.gx = (float)myIMU.gyroCount[0]*myIMU.gRes;
         myIMU.gy = (float)myIMU.gyroCount[1]*myIMU.gRes;
         myIMU.gz = (float)myIMU.gyroCount[2]*myIMU.gRes;
-    
+
         myIMU.readMagData(myIMU.magCount);  // Read the x/y/z adc values
         myIMU.getMres();
         // User environmental x-axis correction in milliGauss, should be
@@ -43,7 +43,7 @@ void IMU_Measure()
         myIMU.magbias[1] = +120.;
         // User environmental x-axis correction in milliGauss
         myIMU.magbias[2] = +125.;
-    
+
         // Calculate the magnetometer values in milliGauss
         // Include factory calibration per data sheet and user environmental
         // corrections
@@ -55,7 +55,7 @@ void IMU_Measure()
         myIMU.mz = (float)myIMU.magCount[2]*myIMU.mRes*myIMU.magCalibration[2] -
                 myIMU.magbias[2];
     } // if (readByte(MPU9250_ADDRESS, INT_STATUS) & 0x01)
-  
+
     // Must be called before updating quaternions!
     myIMU.updateTime();
 }
@@ -118,29 +118,43 @@ void IMU_ExportData(float dataArray[])
 //This function implements the IMU tester configuration
 //The idea is we will run the IMU_Test function instead of the logic, it will spit out data while we rotate the IMU to different orientations and see data matches our estimates
 #include "Logger.h"
-void IMU_Test ()
+void IMU_TestInit ()
 {
-	float dataArray[12];
 	//Initiate
 	Log_Init();
-	Log_DefineNextField("Time","msec");
+	Log_DefineNextField("deltat","s");
 	Log_DefineNextField("a_x","mg");
 	Log_DefineNextField("a_y","mg");
+	Log_DefineNextField("a_z","mg");
+	Log_DefineNextField("a_mag","mg");
+	Log_DefineNextField("g_x","mg");
+	Log_DefineNextField("g_y","mg");
+	Log_DefineNextField("g_z","mg");
+	Log_DefineNextField("m_x","mg");
+	Log_DefineNextField("m_y","mg");
+	Log_DefineNextField("m_z","mg");
+	Log_DefineNextField("z_ang","mg");
 	//... TBD Add more fields
 	Log_WriteLogHeader();
-	IMU_Init();
-	
-	while (true) //Loop forever
-	{
-		//Read IMU and log values
-		IMU_Measure();
-		
-		IMU_ExportData(dataArray);
-		for(int i=0;i<11;i++)
-			Log_SetData(i,dataArray[i]);
+	//IMU_Init();
+}
+void IMU_Test ()
+{
+	IMU_TestInit();
 
-		//Log
-		Log_WriteLine();
-	}
+	float dataArray[12];
+	// while (true) //Loop forever
+	// {
+	// 	//Read IMU and log values
+	// 	//Log_SetTime(millis());
+	// 	// IMU_Measure();
+	// 	//
+	// 	// IMU_ExportData(dataArray);
+	// 	// for(int i=0;i<12;i++)
+	// 	// 	Log_SetData(i,dataArray[i]);
+	//
+	// 	//Log
+	// 	//Log_WriteLine();
+	// }
 	//TBD - try it and see if it works
 }
