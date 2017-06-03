@@ -122,16 +122,16 @@ void IMU_TestLogInit ()
 {
 	//Initiate
 	Log_Init();
-	Log_DefineNextField("a_x","mg");
-	Log_DefineNextField("a_y","mg");
-	Log_DefineNextField("a_z","mg");
-	Log_DefineNextField("a_mag","mg");
-	Log_DefineNextField("g_x","mg");
-	Log_DefineNextField("g_y","mg");
-	Log_DefineNextField("g_z","mg");
-	Log_DefineNextField("m_x","mg");
-	Log_DefineNextField("m_y","mg");
-	Log_DefineNextField("m_z","mg");
+	Log_DefineNextField("a_x","g");
+	Log_DefineNextField("a_y","g");
+	Log_DefineNextField("a_z","g");
+	Log_DefineNextField("a_mag","g");
+	Log_DefineNextField("g_x","deg/s");
+	Log_DefineNextField("g_y","deg/s");
+	Log_DefineNextField("g_z","deg/s");
+	Log_DefineNextField("m_x","mGauss");
+	Log_DefineNextField("m_y","mGauss");
+	Log_DefineNextField("m_z","mGauss");
 	Log_DefineNextField("z_ang","deg");
 
 	Log_WriteLogHeader();
@@ -142,18 +142,18 @@ void IMU_Test ()
 	IMU_Init();
 
 	float dataArray[11];
-	//while (true) //Loop forever
-	// {
-	// 	//Read IMU and log values
-	// 	//Log_SetTime(millis());
-	// 	// IMU_Measure();
-	// 	//
-	// 	// IMU_ExportData(dataArray);
-	// 	// for(int i=0;i<11;i++)
-	// 	// 	Log_SetData(i,dataArray[i]);
-	//
-	// 	//Log
-	// 	//Log_WriteLine();
-	// }
+	while (true) //Loop forever
+	 {
+	 	//Read IMU and log values
+	 	Log_SetTime(millis());
+ 	  IMU_Measure();
+	 	
+    IMU_ExportData(dataArray);
+ 	  for(int i=0;i<11;i++)
+ 	 	  Log_SetData(i,dataArray[i]);
+	
+	 	//Log
+	 	Log_WriteLine();
+	 }
 	//TBD - try it and see if it works
 }
