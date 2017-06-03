@@ -155,5 +155,4 @@ void IMU_Test ()
 	 	//Log
 	 	Log_WriteLine();
 	 }
-	//TBD - try it and see if it works
 }

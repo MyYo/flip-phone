@@ -57,9 +57,41 @@ void   Dist_ExportData(float dataArray[]) //Export data for logging
 	dataArray[1] = currentDistance;
 }
 
+//This function implements the Dist tester configuration
+//The idea is we will run the Dist_Test function instead of the logic, it will spit out data while we change distance and see data matches our estimates
+#include "Logger.h"
+void Dist_TestLogInit ()
+{
+  //Initiate
+  Log_Init();
+  Log_DefineNextField("Ping_Dev","N/A");
+  Log_DefineNextField("Dist","m");
+
+  Log_WriteLogHeader();
+}
 
 //Tester function
 void   Dist_Test ()
 {
-	//TBD - do like IMU Tester function
+  Disg_TestLogInit();
+  Dist_Init();
+  Dist_SetActiveDevice(DOWN_FACING_PING);
+  
+  float dataArray[2];
+  while (true) //Loop forever
+   {
+    //Read dist and log values
+    Log_SetTime(millis());
+    Dist_Measure();
+    
+    Dist_ExportData(dataArray);
+    for(int i=0;i<2;i++)
+      Log_SetData(i,dataArray[i]);
+  
+    //Log
+    Log_WriteLine();
+   }
+
+   //TBD - Check to see if it works
+ 
 }
