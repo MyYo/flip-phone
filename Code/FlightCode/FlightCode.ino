@@ -32,9 +32,10 @@ void loop()
 void loop()
 {
   //Testers (uncomment if needed)
+  delay(5000);
   //Log_Test();     //Passed for COM, TODO SD
-  IMU_Test();     //Not Passed Yet
-  //Dist_Test();    //Not Passed Yet
+  //IMU_Test();     //Passed 060317
+  Dist_Test();    //Not Passed Yet
   //Or_Prop_Test(); //Not Passed Yet
   //IMFO_Test();    //Not Passed Yet
   //Eng_Test();     //Not Passed Yet

@@ -241,6 +241,5 @@ float QtAngleToZenit (float q1, float q2, float q3, float q4) //degree
   //To get the angle I used the equation angle = acos([0 0 1] * R *[0;0;1])
   return acos(1-2*(q2*q2+q3*q3))*180/3.141;
 
-  //TBD: Yonatan - I wrote this equation, but am not sure it actually true. Need to test
 }
 

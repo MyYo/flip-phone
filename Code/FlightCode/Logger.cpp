@@ -24,7 +24,6 @@ void clearLine ()
 		lineData[i]=0;
 	}
 	lineNote = "";
-	nFields = 0;
 }
 
 void Log_Init ()
@@ -39,6 +38,7 @@ void Log_Init ()
 	//Initiate filed
 	fNames="";
 	clearLine();
+  nFields = 0;
 }
 
 void logWrite(String message)
