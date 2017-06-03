@@ -32,8 +32,8 @@ void loop()
 void loop()
 {
   //Testers (uncomment if needed)
-  delay(5000);
-  Log_Test();     //Passed for COM, TODO SD
+  //delay(5000);
+  //Log_Test();     //Passed for COM, SD 060317
   //IMU_Test();     //Passed 060317
   //Dist_Test();    //Passed 060317
   //Or_Prop_Test(); //Not Passed Yet

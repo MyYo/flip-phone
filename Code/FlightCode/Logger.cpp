@@ -41,6 +41,15 @@ void Log_Init ()
   nFields = 0;
 }
 
+void Log_Close ()
+{
+#ifdef LOG_TO_SD
+  SD_Close();
+#else
+  
+#endif
+}
+
 void logWrite(String message)
 {
 #ifdef LOG_TO_SD
@@ -111,4 +120,5 @@ void Log_Test ()
 
 	Log_WriteLine();
 
+  Log_Close();
 }

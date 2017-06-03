@@ -19,15 +19,12 @@ void SD_Init ()
 	Wire.begin();
 
 	//Configure Hardware
-	pinMode(PIN_SD_SWITCH_POWER,OUTPUT);
-	pinMode(PIN_SD_SWITCH_READ,INPUT);
 	pinMode(PIN_SD_CARD_DETECT, INPUT); //Used to detect whether SD card is present
 
 	initializeCard();
 	dataFile = SD.open("data.txt", FILE_WRITE);
   
 	//Try to start the SD card and get it ready
-	digitalWrite(PIN_SD_SWITCH_POWER,HIGH);
 	if (!digitalRead(PIN_SD_CARD_DETECT))
 	{
 		initializeCard();

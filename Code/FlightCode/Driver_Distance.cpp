@@ -89,7 +89,5 @@ void   Dist_Test ()
   
     //Log
     Log_WriteLine();
-   }
-
- 
+   } 
 }

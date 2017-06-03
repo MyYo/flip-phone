@@ -4,7 +4,7 @@
 #include "Arduino.h"
 
 void Log_Init ();
-
+void Log_Close ();
 void Log_DefineNextField (String fName, String fUnit); //Define header
 void Log_SetData (int fI, float data);
 void Log_SetLoigcState(unsigned short newState);
