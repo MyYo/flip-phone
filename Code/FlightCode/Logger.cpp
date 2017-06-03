@@ -4,7 +4,7 @@
 
 #ifdef LOG_TO_SD
 //Include SD Card dirver only if SD card is used
-#include "Driver_SD_Card.h"
+#include "Driver_SDCard.h"
 #endif
 
 #define N_OF_LOG_FILEDS 20 //N fields

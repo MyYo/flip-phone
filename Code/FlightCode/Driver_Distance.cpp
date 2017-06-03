@@ -48,7 +48,7 @@ void  Dist_Measure()
 	pulseDuration=pulseDuration/2; 
  
 	// now convert to meters. We're metric here people...
-	currentDistance = int((pulseDuration/29.0)/100.0);
+	currentDistance = ((float)(pulseDuration)/29.0)/100.0;
 }
 float  Dist_GetDistance() {return currentDistance;}
 void   Dist_ExportData(float dataArray[]) //Export data for logging
@@ -73,7 +73,7 @@ void Dist_TestLogInit ()
 //Tester function
 void   Dist_Test ()
 {
-  Disg_TestLogInit();
+  Dist_TestLogInit();
   Dist_Init();
   Dist_SetActiveDevice(DOWN_FACING_PING);
   
@@ -83,7 +83,6 @@ void   Dist_Test ()
     //Read dist and log values
     Log_SetTime(millis());
     Dist_Measure();
-    
     Dist_ExportData(dataArray);
     for(int i=0;i<2;i++)
       Log_SetData(i,dataArray[i]);
@@ -92,6 +91,5 @@ void   Dist_Test ()
     Log_WriteLine();
    }
 
-   //TBD - Check to see if it works
  
 }

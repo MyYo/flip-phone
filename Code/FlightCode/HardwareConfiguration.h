@@ -7,8 +7,8 @@
 #define PIN_SD_SWITCH_READ		9
 #define PIN_SD_CARD_DETECT		4
 #define PIN_SD_CHIP_SELECT		5
-#define PIN_PING_DOWNFACING		1
-#define PIN_PING_UPFACING		1
+#define PIN_PING_DOWNFACING		7
+#define PIN_PING_UPFACING		  1
 #define PIN_I2C_SCL				A5  //Used by IMU
 #define PIN_I2C_SDA				A4  //Used by IMU
 
