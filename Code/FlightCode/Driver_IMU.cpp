@@ -152,7 +152,7 @@ void IMU_Test ()
 	 	
 		IMU_ExportData(dataArray);
 		for(int i=0;i<11;i++)
-		Log_SetData(i,dataArray[i]);
+			Log_SetData(i,dataArray[i]);
 	
 		//Log
 		Log_WriteLine();
