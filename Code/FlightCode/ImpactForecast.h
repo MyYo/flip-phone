@@ -1,7 +1,7 @@
 #ifndef _IMPACT_FORECAST_H_
 #define _IMPACT_FORECAST_H_
 
-#define MAX_NUMBER_DIST_MEASURMENTS 50
+#define MAX_NUMBER_DIST_MEASURMENTS 10
 
 void IMFO_AddDataPoint (unsigned long timeMs, float distanceM); //time in [msec], distance in m
 unsigned long IMFO_PredictTimeofImpact (); //Returns time of impact [msec], reutn 0 if error happend

@@ -29,6 +29,7 @@ void loop()
 
 //#include "Driver_IMU.h"
 #include "Driver_Distance.h"
+#include "ImpactForecast.h"
 void loop()
 {
   //Testers (uncomment if needed)
@@ -37,7 +38,7 @@ void loop()
   //IMU_Test();     //Passed 060317
   //Dist_Test();    //Passed 060317
   //Or_Prop_Test(); //Not Passed Yet
-  //IMFO_Test();    //Not Passed Yet
+  IMFO_Test();    //Not Passed Yet
   //Eng_Test();     //Not Passed Yet
 
   while (true);
