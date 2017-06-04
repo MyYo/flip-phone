@@ -31,7 +31,6 @@ void RunLogic ()
 		switch(currentState)
 		{
 		case LS_BOOT_UP:
-
 			nextState=lsBootUp(prevState);
 			break;
 		case LS_STAND_BY:
