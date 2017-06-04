@@ -96,7 +96,9 @@ float IMU_GetZenitAngle ()
 
 void IMU_GetRotationRate (float &omegaX,float &omegaY,float &omegaZ)
 {
-	//TBD
+	omegaX = myIMU.gx*3.141/180.0;
+	omegaY = myIMU.gy*3.141/180.0;
+	omegaZ = myIMU.gz*3.141/180.0;
 }
 
 void IMU_ExportData(float dataArray[])
