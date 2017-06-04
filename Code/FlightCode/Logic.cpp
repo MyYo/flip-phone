@@ -92,7 +92,6 @@ void logicGatherData ()
 		Log_SetData(i,omega[j]); i++;
 
 	//Distance Sensor Telemetry
-
 	Dist_ExportData(tmp);
 	Log_SetData(i,tmp[1]); i++;
 	Log_SetData(i,tmp[2]); i++;
