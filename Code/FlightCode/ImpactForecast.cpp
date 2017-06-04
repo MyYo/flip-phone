@@ -65,8 +65,9 @@ unsigned long IMFO_WhenToStartEngine (unsigned predictedImpactTimeMs, float pred
 
 void IMFO_Test_ImpactTime()
 {
+	//TBD - make sure prediction fits measurments and record run time
 	Log_Init();
-	Log_DefineNextField("N Samples","n/a"); 
+	Log_DefineNextField("NSamples","n/a"); 
 	Log_DefineNextField("ImpactTime","msec"); 
 	Log_WriteLogHeader();
 	
