@@ -74,8 +74,9 @@ void Log_Init ()
 
 void Log_Close ()
 {
+	logWrite("Closing Log");
 #ifdef LOG_TO_SD
-  SD_Close();
+	SD_Close();
 #else
   
 #endif

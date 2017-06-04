@@ -31,6 +31,7 @@ void RunLogic ()
 		switch(currentState)
 		{
 		case LS_BOOT_UP:
+
 			nextState=lsBootUp(prevState);
 			break;
 		case LS_STAND_BY:
@@ -57,7 +58,11 @@ void RunLogic ()
 		}
 
 		//Log
-		if (tCurrentTime-tFallDetectTime_T0>= 1*1000 || tCurrentTime>= 30*1000)
+		if (
+			tFallDetectTime_T0>0 && (tCurrentTime-tFallDetectTime_T0>= 1*1000)  //If fall detected and x time passed since
+			|| 
+			tCurrentTime>= 30*1000 //Maximum time reached
+			)
 		{
 			//Too long has passed since start of the experiment / fall start. Close the log
 			Log_Close();
@@ -66,13 +71,15 @@ void RunLogic ()
 		{
 			logicGatherData();
 			Log_SetLoigcState(currentState);
-			if (nextState != currentState);
+			if (nextState != currentState)
 				Log_AddNote("State Changed");
 			Log_WriteLine();
 		}
 
 		prevState = currentState;
 		currentState = nextState;
+
+		//delay(10);
 	}
 }
 
@@ -81,8 +88,7 @@ void logicGatherData ()
 	float tmp[20];
 
 	int i=0;
-	Log_SetData(i,tCurrentTime); i++;
-	
+
 	//IMU Telemetry
 	Log_SetData(i,IMU_GetAccMag()); i++;
 	Log_SetData(i,IMU_GetZenitAngle()); i++;
@@ -107,6 +113,7 @@ int lsBootUp(int prevLogicState)
 	Log_DefineNextField("omegaZ","rad/sec"); 
 	Log_DefineNextField("DistToGND","[m]"); 
 	Log_DefineNextField("DistDevice","#");
+	Log_WriteLogHeader();
 
 	Dist_Init();
 	IMU_Init();

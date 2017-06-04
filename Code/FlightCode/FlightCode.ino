@@ -23,6 +23,7 @@ void setup()
 void loop()
 {
   //Operational mode
+  delay(1000); //delay before starting
   RunLogic();
 }
 #else
