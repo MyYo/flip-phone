@@ -158,7 +158,7 @@ int lsDistanceAquisition(int prevLogicState)
 		}
 
 		Dist_Measure(); //Measure distance 
-		IMFO_AddDataPoint(tCurrentTime,Dist_GetDistance());
+		IMFO_AddDataPoint(tCurrentTime-tFallDetectTime_T0,Dist_GetDistance()); //Log data with respect to fall start
 
 		//Propagate
 		OrProp_Prop (10);
@@ -175,7 +175,7 @@ int lsDistanceAquisition(int prevLogicState)
 int lsImpactForecast(int prevLogicState)
 {
 	//Compute time of impact
-	tTimeOfImpact_T2_Predicted = IMFO_PredictTimeofImpact();
+	tTimeOfImpact_T2_Predicted = IMFO_PredictTimeofImpact()+tFallDetectTime_T0;
 	Log_AddNote("Predicted T2=" + String(tTimeOfImpact_T2_Predicted) + "[msec]");
 
 	//Compute Angle at time of impact
