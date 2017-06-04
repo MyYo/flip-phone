@@ -143,16 +143,16 @@ void IMU_Test ()
 
 	float dataArray[11];
 	while (true) //Loop forever
-	 {
-	 	//Read IMU and log values
-	 	Log_SetTime(millis());
- 	  IMU_Measure();
+	{
+		//Read IMU and log values
+		Log_SetTime(millis());
+		IMU_Measure();
 	 	
-    IMU_ExportData(dataArray);
- 	  for(int i=0;i<11;i++)
- 	 	  Log_SetData(i,dataArray[i]);
+		IMU_ExportData(dataArray);
+		for(int i=0;i<11;i++)
+		Log_SetData(i,dataArray[i]);
 	
-	 	//Log
-	 	Log_WriteLine();
-	 }
+		//Log
+		Log_WriteLine();
+	}
 }
