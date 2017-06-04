@@ -21,10 +21,17 @@ void Dist_SetActiveDevice(int whichPingDeviceToSet)
 void  Dist_Measure()
 {
 	int pinNumber;
-	if (whichPingDevice)
-		pinNumber = PIN_PING_DOWNFACING;
-	else
-		pinNumber = PIN_PING_UPFACING;
+	switch (whichPingDevice)
+	{
+		case UP_FACING_PING:
+			pinNumber = PIN_PING_UPFACING;
+			break;
+		case DOWN_FACING_PING:
+			pinNumber = PIN_PING_DOWNFACING;
+			break;
+		default:
+			return;
+	}
 	
 	long pulseDuration=0;
 	// set pin as output so we can send a pulse
