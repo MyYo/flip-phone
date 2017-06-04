@@ -72,6 +72,15 @@ void Log_Init ()
 	nFields = 0;
 }
 
+void logWrite(String message)
+{
+#ifdef LOG_TO_SD
+	SD_Log(message);
+#else
+	Serial.println(message);
+#endif
+}
+
 void Log_Close ()
 {
 	logWrite("Closing Log");
@@ -79,15 +88,6 @@ void Log_Close ()
 	SD_Close();
 #else
   
-#endif
-}
-
-void logWrite(String message)
-{
-#ifdef LOG_TO_SD
-	SD_Log(message);
-#else
-	Serial.println(message);
 #endif
 }
 

@@ -16,7 +16,7 @@
 //Thresholds and Times
 ////////////////////////////////////
 //			Name			  Value //[Units]
-const float freefallGThresh = 0;	//[mg] What is the acceleration threshold beyond which we say that we are in freefall?
+const float freefallGThresh = 0.5;	//[g] What is the acceleration threshold beyond which we say that we are in freefall?
 const float aquisitionTime  = 150;  //[msec]
 const float TBD = 0; //TBD: remove this, it is just a place holder
 
