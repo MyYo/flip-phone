@@ -26,6 +26,35 @@ void clearLine ()
 	lineNote = "";
 }
 
+//If Compiling for QDUINOMINI, use LED desplay to indicate logic state
+#ifdef ARDUINO_AVR_QDUINOMINI
+#include "Qduino.h"
+qduino q;
+void LED_Init ()
+{
+	q.setup();
+}
+void LED_SetColor(unsigned short Color)
+{
+	switch(Color%8)
+	{
+		case 0: q.setRGB("red"); break;
+		case 1: q.setRGB("green"); break;
+		case 2: q.setRGB("blue"); break;
+		case 3: q.setRGB("orange"); break;
+		case 4: q.setRGB("cyan"); break;
+		case 5: q.setRGB("purple"); break;
+		case 6: q.setRGB("pink"); break;
+		case 7: q.setRGB("white"); break;
+	}
+}
+#else
+//No LED, No desplay
+void LED_Init (){}
+void LED_SetColor(unsigned short Color){};
+#endif
+
+
 void Log_Init ()
 {
 #ifdef LOG_TO_SD
@@ -35,10 +64,12 @@ void Log_Init ()
 	Wire.begin();
 #endif
 
+	LED_Init(); //If LED is available, display logic state as LED color
+
 	//Initiate filed
 	fNames="";
 	clearLine();
-  nFields = 0;
+	nFields = 0;
 }
 
 void Log_Close ()
@@ -75,7 +106,11 @@ void Log_SetData (int fI, float data)
 	else
 		lineData[fI] = data;
 }
-void Log_SetLoigcState(unsigned short newState){logicState = newState;}
+void Log_SetLoigcState(unsigned short newState)
+{
+	logicState = newState;
+	LED_SetColor(newState); //If LED is available, display logic state as LED color
+}
 void Log_SetTime(unsigned long time){timems= time;}
 void Log_AddNote(String note) {lineNote += note + ".";}
 

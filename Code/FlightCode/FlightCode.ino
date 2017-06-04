@@ -30,10 +30,17 @@ void loop()
 //#include "Driver_IMU.h"
 #include "Driver_Distance.h"
 #include "ImpactForecast.h"
+
 void loop()
 {
+  //Blink before starting tests
+  for (int i=0;i<4;i++)
+  {
+    Log_SetLoigcState(i);
+    delay(500);
+  }
+    
   //Testers (uncomment if needed)
-  //delay(5000);
   //Log_Test();     //Passed for COM, SD 060317
   //IMU_Test();     //Passed 060317
   //Dist_Test();    //Passed 060317
