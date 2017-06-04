@@ -8,11 +8,11 @@
 
 //Timers
 unsigned long tCurrentTime; //[ms]
-unsigned long tFallDetectTime_T0; //[ms]
-unsigned long tEndOfDataAquisitionTime_T1; //[ms]
-unsigned long tEngineStartTime; //[ms]
-unsigned long tTimeOfImpact_T2_Predicted; //[ms]
-unsigned long tTimeOfImpact_T2_Actual; //[ms]
+unsigned long tFallDetectTime_T0=0; //[ms]
+unsigned long tEndOfDataAquisitionTime_T1=0; //[ms]
+unsigned long tEngineStartTime=0; //[ms]
+unsigned long tTimeOfImpact_T2_Predicted=0; //[ms]
+unsigned long tTimeOfImpact_T2_Actual=0; //[ms]
 
 void logicGatherData ();
 
@@ -57,11 +57,19 @@ void RunLogic ()
 		}
 
 		//Log
-		logicGatherData();
-		Log_SetLoigcState(currentState);
-		if (nextState != currentState);
-			Log_AddNote("State Changed");
-		Log_WriteLine();
+		if (tCurrentTime-tFallDetectTime_T0>= 1*1000 || tCurrentTime>= 30*1000)
+		{
+			//Too long has passed since start of the experiment / fall start. Close the log
+			Log_Close();
+		}
+		else
+		{
+			logicGatherData();
+			Log_SetLoigcState(currentState);
+			if (nextState != currentState);
+				Log_AddNote("State Changed");
+			Log_WriteLine();
+		}
 
 		prevState = currentState;
 		currentState = nextState;
