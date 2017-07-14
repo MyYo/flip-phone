@@ -10,7 +10,7 @@
 #include "HardwareConfiguration.h"
 #include "Logger.h"
 
-//#define IS_RUN_OPERATIONAL //Comment out if you would like to run tests only
+#define IS_RUN_OPERATIONAL //Comment out if you would like to run tests only
 
 void setup()
 {
@@ -46,7 +46,7 @@ void loop()
   IMU_Test();     //Passed 060317
   //Dist_Test();    //Passed 060317
   //Or_Prop_Test(); //Not Passed Yet
-  //IMFO_Test();    //Passed 060417
+  //IMFO_Test();    //Passed ImpactTime 060417, Not Passed: IMFO_WhenToStartEngine
   //Eng_Test();     //Not Passed Yet
 
   while (true);

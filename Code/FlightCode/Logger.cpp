@@ -27,7 +27,7 @@ void clearLine ()
 }
 
 //If Compiling for QDUINOMINI, use LED desplay to indicate logic state
-#ifdef ARDUINO_AVR_QDUINOMINI
+#ifdef ARDUINO_AVR_QDUINOMINI1
 #include "Qduino.h"
 qduino q;
 void LED_Init ()

@@ -3,7 +3,7 @@
 #include "logger.h"
 
 unsigned long t0;
-float zenitAngles[OR_PROP_TABLE_SIZE];
+float zenitAngles[OR_PROP_TABLE_SIZE];  //[deg]
 
 //Save current step of propagation
 int currentTableIndex;
@@ -43,7 +43,7 @@ void OrProp_Prop (int howManySteps) //How many table instances to enter in the p
 		zenitAngles[currentTableIndex] = QtAngleToZenit (currentQt[0],currentQt[1],currentQt[2],currentQt[3]);
 	}
 }
-float OrProp_GetZenitAngle (unsigned long t) //Get Zenit angle at specific time
+float OrProp_GetZenitAngle (unsigned long t) //Get Zenit angle at specific time [deg]
 {
 	int i = (int)(1.0*(float)(t-t0)/float(OR_PROP_STEP));
 

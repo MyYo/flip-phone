@@ -13,12 +13,14 @@
 #define LS_ERROR				7
 
 
-//Thresholds and Times
+//Thresholds and Times, TBD: Update after experimenting with values
 ////////////////////////////////////
-//			Name			  Value //[Units]
+//			    Name			        Value //[Units]
 const float freefallGThresh = 0.5;	//[g] What is the acceleration threshold beyond which we say that we are in freefall?
+const float restoredGThresh = 1;    //[g] What is the acceleration threshold beyond which we say that we have landed?
 const float aquisitionTime  = 150;  //[msec]
-const float TBD = 0; //TBD: remove this, it is just a place holder
+const float pingHalfFOV     = 45;   //[deg] Ping was tested to have full FOV of 90 degrees, so Half FOV = 45 degrees.
+
 
 void RunLogic ();
 int lsBootUp(int prevLogicState);
