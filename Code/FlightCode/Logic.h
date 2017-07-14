@@ -3,14 +3,14 @@
 
 //Logic States
 ////////////////////////////////////
-#define LS_BOOT_UP				0
-#define LS_STAND_BY				1
-#define LS_DISTANCE_AQUISITION	2
-#define LS_IMPACT_FORECAST		3
-#define LS_ENGINE_START			4   
-#define LS_ENGINE_SHUTDOWN		5
-#define LS_IMPACT				6
-#define LS_ERROR				7
+#define LS_BOOT_UP              0
+#define LS_STAND_BY             1
+#define LS_DISTANCE_AQUISITION  2
+#define LS_IMPACT_FORECAST      3
+#define LS_ENGINE_START         4   
+#define LS_ENGINE_SHUTDOWN      5
+#define LS_IMPACT               6
+#define LS_ERROR                7
 
 
 //Thresholds and Times, TBD: Update after experimenting with values
