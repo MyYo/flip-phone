@@ -148,10 +148,10 @@ int lsDistanceAquisition(int prevLogicState)
 	if (tCurrentTime < tFallDetectTime_T0+aquisitionTime)
 	{
 		//Aquire Data
-		float ang = OrProp_GetZenitAngle (tCurrentTime);
-		if (ang > TBD && ang <TBD)
+		float ang = OrProp_GetZenitAngle (tCurrentTime); //[deg]
+		if      (abs(ang-180) <= pingHalfFOV || abs(ang+180) <= pingHalfFOV) //Upfacing Ping is installed at angle = 0 [deg] 
 			Dist_SetActiveDevice(UP_FACING_PING);
-		else if (ang > TBD && ang <TBD)
+		else if (abs(ang-  0) <= pingHalfFOV || abs(ang-360) <= pingHalfFOV) //Upfacing Ping is installed at angle = 180 [deg]. 360 case is just in case
 			Dist_SetActiveDevice(DOWN_FACING_PING);
 		else
 		{
@@ -221,18 +221,20 @@ int lsEngineShutdown(int prevLogicState)
 	{
 		//Waiting for impact
 		IMU_Measure();
-		if (IMU_GetAccMag() > TBD)
+		if (IMU_GetAccMag() > restoredGThresh) //[g]
 		{
-			Eng_Break();
-			Log_AddNote("Eng Break");
+			//Impact Detected
+			Eng_Break(); //Stop Engine
+			Log_AddNote("Eng Break, Impact");
 			return LS_IMPACT;
 		}
 		else
 			return LS_ENGINE_SHUTDOWN;
 	}
-	else
+	else 
 	{
-		Eng_Break();
+		//Time expired
+		Eng_Break(); //Stop Engine
 		Log_AddNote("Eng Break");
 		return LS_IMPACT;
 	}
@@ -241,9 +243,10 @@ int lsEngineShutdown(int prevLogicState)
 int lsImpact (int prevLogicState)
 {
 	IMU_Measure();
-	if (IMU_GetAccMag() > TBD)
+	if (IMU_GetAccMag() > restoredGThresh) //[g]
 	{
-		double ang = IMU_GetZenitAngle();
+		//Impact Detected
+		double ang = IMU_GetZenitAngle(); //[deg]
 		tTimeOfImpact_T2_Actual = tCurrentTime;
 
 		Log_AddNote("Impact!");
