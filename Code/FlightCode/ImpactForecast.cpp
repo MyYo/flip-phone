@@ -64,7 +64,7 @@ unsigned long IMFO_PredictTimeofImpact ()
 	return tImp;
 }
 
-unsigned long IMFO_WhenToStartEngine (unsigned predictedImpactTimeMs, float predictedZenitAngle) //Returns time to start engine, based on impact time and impact orientation
+unsigned long IMFO_WhenToStartMotor (unsigned predictedImpactTimeMs, float predictedZenitAngle) //Returns time to start motor, based on impact time and impact orientation
 {
 	//TBD, do the magic
  
@@ -112,7 +112,7 @@ void IMFO_Test_ImpactTime()
 
 void IMFO_Test()
 {
-	//Uncomment to choose to test impact time or when to start engine
+	//Uncomment to choose to test impact time or when to start motor
 	IMFO_Test_ImpactTime();
 }
 	

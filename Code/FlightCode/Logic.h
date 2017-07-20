@@ -27,8 +27,8 @@ int lsBootUp(int prevLogicState);
 int lsStandBy(int prevLogicState);
 int lsDistanceAquisition(int prevLogicState);
 int lsImpactForecast(int prevLogicState);
-int lsEngineStart(int prevLogicState);
-int lsEngineShutdown(int prevLogicState);
+int lsMotorStart(int prevLogicState);
+int lsMotorShutdown(int prevLogicState);
 int lsImpact (int prevLogicState);
 int lsError(int prevLogicState);
 

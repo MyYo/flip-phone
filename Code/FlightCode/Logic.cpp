@@ -4,17 +4,17 @@
 #include "Driver_Distance.h"
 #include "OrientationPropagate.h"
 #include "ImpactForecast.h"
-#include "Engine.h"
+#include "Motor.h"
 
 //Timers
 unsigned long tCurrentTime; //[ms]
 unsigned long tFallDetectTime_T0=0; //[ms]
 unsigned long tEndOfDataAquisitionTime_T1=0; //[ms]
-unsigned long tEngineStartTime=0; //[ms]
+unsigned long tMotorStartTime=0; //[ms]
 unsigned long tTimeOfImpact_T2_Predicted=0; //[ms]
 unsigned long tTimeOfImpact_T2_Actual=0; //[ms]
 
-bool enginePolarization; //True - FW, false - BW
+bool motorPolarization; //True - FW, false - BW
 
 void logicGatherData ();
 
@@ -45,10 +45,10 @@ void RunLogic ()
 			nextState=lsImpactForecast(prevState);
 			break;
 		case LS_ENGINE_START:
-			nextState=lsEngineStart(prevState);
+			nextState=lsMotorStart(prevState);
 			break;
 		case LS_ENGINE_SHUTDOWN:
-			nextState=lsEngineShutdown(prevState);
+			nextState=lsMotorShutdown(prevState);
 			break;
 		case LS_IMPACT:
 			nextState=lsImpact(prevState);
@@ -119,7 +119,7 @@ int lsBootUp(int prevLogicState)
 	Dist_Init();
 	IMU_Init();
 	IMFO_Init();
-  Eng_Init();
+  Motor_Init();
 
 	return LS_STAND_BY;
 }
@@ -191,41 +191,41 @@ int lsImpactForecast(int prevLogicState)
 	float angleAtT2 = OrProp_GetZenitAngle (tTimeOfImpact_T2_Predicted);
 	Log_AddNote("Predicted AngT2=" + String(angleAtT2) + "[deg]");
 
-	tEngineStartTime = IMFO_WhenToStartEngine (tTimeOfImpact_T2_Predicted, angleAtT2);
-	if (tEngineStartTime == 0)
+	tMotorStartTime = IMFO_WhenToStartMotor (tTimeOfImpact_T2_Predicted, angleAtT2);
+	if (tMotorStartTime == 0)
 	{
 		//Error happend
 		return LS_ERROR;
 	}
 
 	if (angleAtT2 < 0)
-		enginePolarization = true; //Set Engine forward polarization
+		motorPolarization = true; //Set Motor forward polarization
 	else 
-		enginePolarization = false; //Set Engine backward polarization
+		motorPolarization = false; //Set Motor backward polarization
 
 	return LS_ENGINE_START;
 }
-int lsEngineStart(int prevLogicState)
+int lsMotorStart(int prevLogicState)
 {
-	if (tCurrentTime < tEngineStartTime)
-		//Wait for the rigth time to start engine
+	if (tCurrentTime < tMotorStartTime)
+		//Wait for the rigth time to start motor
 		return LS_ENGINE_START;
 	else
 	{
-		//Start Engine!
+		//Start Motor!
    
-    Log_AddNote("Eng Start");
-    if(enginePolarization){
-      Eng_StartForward();
+    Log_AddNote("Motor Start");
+    if(motorPolarization){
+      Motor_StartForward();
     }
     else {
-      Eng_StartBackward();
+      Motor_StartBackward();
     }
 		
 		return LS_ENGINE_SHUTDOWN;
 	}
 }
-int lsEngineShutdown(int prevLogicState)
+int lsMotorShutdown(int prevLogicState)
 {
 	if (tCurrentTime < tTimeOfImpact_T2_Predicted)
 	{
@@ -234,8 +234,8 @@ int lsEngineShutdown(int prevLogicState)
 		if (IMU_GetAccMag() > restoredGThresh) //[g]
 		{
 			//Impact Detected
-			Eng_Break(); //Stop Engine
-			Log_AddNote("Eng Break, Impact");
+			Motor_Break(); //Stop Motor
+			Log_AddNote("Motor Break, Impact");
 			return LS_IMPACT;
 		}
 		else
@@ -244,8 +244,8 @@ int lsEngineShutdown(int prevLogicState)
 	else 
 	{
 		//Time expired
-		Eng_Break(); //Stop Engine
-		Log_AddNote("Eng Break");
+		Motor_Break(); //Stop Motor
+		Log_AddNote("Motor Break");
 		return LS_IMPACT;
 	}
 }

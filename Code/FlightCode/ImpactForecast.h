@@ -11,7 +11,7 @@ void IMFO_Init ();
 void IMFO_AddDataPoint (unsigned long timeMs, float distanceM); //time in [msec], distance in m
 unsigned long IMFO_PredictTimeofImpact (); //Returns time of impact [msec], reutn 0 if error happend
 
-unsigned long IMFO_WhenToStartEngine (unsigned predictedImpactTimeMs, float predictedZenitAngle); //Returns time to start engine, based on impact time and impact orientation
+unsigned long IMFO_WhenToStartMotor (unsigned predictedImpactTimeMs, float predictedZenitAngle); //Returns time to start motor, based on impact time and impact orientation
 
 void IMFO_Test();
 #endif

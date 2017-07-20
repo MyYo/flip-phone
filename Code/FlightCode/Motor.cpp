@@ -1,25 +1,25 @@
-#include "Engine.h"
+#include "Motor.h"
 #include "logger.h"
 #include "Arduino.h"
 #include "HardwareConfiguration.h"
 
-void   Eng_Init ()
+void   Motor_Init ()
 {
     //Init pins as output
-    Log_AddNote("Initializing Engine");
+    Log_AddNote("Initializing Motor");
     pinMode(PIN_MOTOR_PWM, OUTPUT);
     pinMode(PIN_MOTOR_INA, OUTPUT);
     pinMode(PIN_MOTOR_INB, OUTPUT);
 
-    //Lock the engine so it does not spin
-    Eng_Break();
+    //Lock the motor so it does not spin
+    Motor_Break();
     
 }
 
 //Make sure you call this function once, otherwise the motor will start-break cycle.
-void   Eng_StartForward ()
+void   Motor_StartForward ()
 {
-  Log_AddNote("Set Engine FW");
+  Log_AddNote("Set Motor FW");
   digitalWrite(PIN_MOTOR_PWM, LOW); //Before changing direction turn off the motor
   digitalWrite(PIN_MOTOR_INA, HIGH);
   digitalWrite(PIN_MOTOR_INB, LOW);
@@ -28,9 +28,9 @@ void   Eng_StartForward ()
 }
 
 //Make sure you call this function once, otherwise the motor will start-break cycle.
-void   Eng_StartBackward ()
+void   Motor_StartBackward ()
 {
-  Log_AddNote("Set Engine BW");
+  Log_AddNote("Set Motor BW");
   digitalWrite(PIN_MOTOR_PWM, LOW); //Before changing direction turn off the motor
   digitalWrite(PIN_MOTOR_INA, LOW);
   digitalWrite(PIN_MOTOR_INB, HIGH);
@@ -38,24 +38,24 @@ void   Eng_StartBackward ()
 }
 
 //Make sure you call this function once, otherwise the motor will start-break cycle.
-void   Eng_Break ()
+void   Motor_Break ()
 {
-  Log_AddNote("Breaking Engine");
+  Log_AddNote("Breaking Motor");
   digitalWrite(PIN_MOTOR_PWM, LOW); //Before changing direction turn off the motor
   digitalWrite(PIN_MOTOR_INA, LOW);
   digitalWrite(PIN_MOTOR_INB, LOW);
   digitalWrite(PIN_MOTOR_PWM, HIGH); //Turn motor back on
 }
 
-void   Eng_Test () //Tester function
+void   Motor_Test () //Tester function
 {
-	//Start and stop engine
-  Eng_Init();
+	//Start and stop motor
+  Motor_Init();
   delay(500);
-  Eng_StartForward();
+  Motor_StartForward();
   delay(500);
-  Eng_Break();
+  Motor_Break();
   delay(500);
-  Eng_StartBackward();
+  Motor_StartBackward();
   delay(500);
 }
