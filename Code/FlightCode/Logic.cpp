@@ -14,6 +14,8 @@ unsigned long tEngineStartTime=0; //[ms]
 unsigned long tTimeOfImpact_T2_Predicted=0; //[ms]
 unsigned long tTimeOfImpact_T2_Actual=0; //[ms]
 
+bool enginePolarization; //True - FW, false - BW
+
 void logicGatherData ();
 
 void RunLogic ()
@@ -117,6 +119,7 @@ int lsBootUp(int prevLogicState)
 	Dist_Init();
 	IMU_Init();
 	IMFO_Init();
+  Eng_Init();
 
 	return LS_STAND_BY;
 }
@@ -196,9 +199,9 @@ int lsImpactForecast(int prevLogicState)
 	}
 
 	if (angleAtT2 < 0)
-		Eng_SetDirection(1); //Set Engine forward polarization
+		enginePolarization = true; //Set Engine forward polarization
 	else 
-		Eng_SetDirection(-1); //Set Engine backward polarization
+		enginePolarization = false; //Set Engine backward polarization
 
 	return LS_ENGINE_START;
 }
@@ -210,8 +213,15 @@ int lsEngineStart(int prevLogicState)
 	else
 	{
 		//Start Engine!
-		Eng_Start();
-		Log_AddNote("Eng Start");
+   
+    Log_AddNote("Eng Start");
+    if(enginePolarization){
+      Eng_StartForward();
+    }
+    else {
+      Eng_StartBackward();
+    }
+		
 		return LS_ENGINE_SHUTDOWN;
 	}
 }

@@ -2,9 +2,9 @@
 #define _ENGINE_H_
 
 void   Eng_Init ();   //Initializes Hardware
-void   Eng_SetDirection (int dir); //1 - froward, -1 backward
-void   Eng_Start ();
-void   Eng_Break ();
+void   Eng_StartForward ();   //Make sure you call this function once, otherwise the motor will start-break cycle.
+void   Eng_StartBackward ();  //Make sure you call this function once, otherwise the motor will start-break cycle.
+void   Eng_Break ();          //Make sure you call this function once, otherwise the motor will start-break cycle.
 
 void   Eng_Test (); //Tester function
 

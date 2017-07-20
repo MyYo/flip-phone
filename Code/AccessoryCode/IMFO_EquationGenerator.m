@@ -1,6 +1,6 @@
 %% Inputs
 clear;
-nMeasurments = 4;
+nMeasurments = 7;
 
 %% Generate solution
 syms g;

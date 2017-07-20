@@ -9,6 +9,9 @@
 #define PIN_PING_UPFACING		1	//Ping Port SIG
 #define PIN_I2C_SCL				A5	//Used by IMU
 #define PIN_I2C_SDA				A4	//Used by IMU
+#define PIN_MOTOR_INA     1  //TBD Motor
+#define PIN_MOTOR_INB     2  //TBD Motor
+#define PIN_MOTOR_PWM     3  //TBD Motor
 
 
 //Select whether to log data through the com connection or SD card
