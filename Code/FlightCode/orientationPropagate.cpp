@@ -71,20 +71,20 @@ void Or_Prop_Test ()
   Log_WriteLogHeader();
 
  //I think this is euler angles 0,0,0? Do a read of phone's qt and move it such that it is at 1,0,0,0 to validate what orientation it looks like
-  qt1 = 1;
-  qt2 = 0;
-  qt3 = 0;
-  qt4 = 0;
+  float qt1 = 1;
+  float qt2 = 0;
+  float qt3 = 0;
+  float qt4 = 0;
   
 
   //[rad/sec]
-  omegaX = 0;
-  omegaY = 0;
-  omegaZ = PI/4;
+  float omegaX = 0;
+  float omegaY = 0;
+  float omegaZ = PI/4;
 
   //Number of steps
-  numSteps = 10;
-  OrProp_SetInitialConditions (millis(), qt1, qt2, qt3, qt4, float omegaX, float omegaY, float omegaZ)
+  int numSteps = 10;
+  OrProp_SetInitialConditions (millis(), qt1, qt2, qt3, qt4, omegaX, omegaY, omegaZ);
   
   OrProp_Prop(numSteps);
   for (int i=0;i<numSteps;i++)

@@ -45,7 +45,7 @@ void loop()
   //Log_Test();     //Passed for COM, SD 060317
   //IMU_Test();     //Passed 060317
   //Dist_Test();    //Passed 060317
-  //Or_Prop_Test(); //Written (072717) but Not Passed Yet
+  Or_Prop_Test(); //Written (072717) but Not Passed Yet
   //IMFO_Test();    //Passed ImpactTime 060417, Not Passed: IMFO_WhenToStartMotor
   Motor_Test();     //Written (071917) but Not Passed Yet
 
