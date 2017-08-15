@@ -1,3 +1,5 @@
+%From: https://github.com/varung/rigidbody/blob/master/Rigid.m
+
 % converts quaternion to rotation matrix
 function [ output_args ] = Varun_QuatCode()
 
