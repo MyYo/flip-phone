@@ -9,7 +9,7 @@ void MadgwickQuaternionUpdate(float ax, float ay, float az, float gx, float gy,
 void MahonyQuaternionUpdate(float ax, float ay, float az, float gx, float gy,
                             float gz, float mx, float my, float mz,
                             float deltat);
-const float * getQ();
+float * getQ();
 
 float QtAngleToZenit (float q1, float q2, float q3, float q4); //Returns current angle to zenit (deg)
 

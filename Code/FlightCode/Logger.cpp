@@ -133,7 +133,7 @@ void Log_WriteLine ()
 	clearLine();
 }
 
-//This function implements the IMU tester configuration
+//This function implements the log tester configuration
 //The idea is to print a demo log
 void Log_Test ()
 {
