@@ -7,6 +7,10 @@
 #include "Driver_SDCard.h"
 #endif
 
+#ifdef LOG_TO_FLASH
+#include "Driver_Flash.h"
+#endif
+
 #define N_OF_LOG_FILEDS 20 //N fields
 
 float lineData[N_OF_LOG_FILEDS];
