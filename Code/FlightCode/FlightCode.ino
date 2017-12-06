@@ -10,7 +10,7 @@
 #include "HardwareConfiguration.h"
 #include "Logger.h"
 
-#define IS_RUN_OPERATIONAL //Comment out if you would like to run tests only
+//#define IS_RUN_OPERATIONAL //Comment out if you would like to run tests only
 
 void setup()
 {
@@ -42,12 +42,12 @@ void loop()
   }
     
   //Testers (uncomment if needed)
-  //Log_Test();     //Passed for COM, SD 060317
+  Log_Test();     //Passed for COM, SD 060317
   //IMU_Test();     //Passed 060317
   //Dist_Test();    //Passed 060317
-  Or_Prop_Test(); //Written (072717) but Not Passed Yet
+  //Or_Prop_Test(); //Written (072717) but Not Passed Yet
   //IMFO_Test();    //Passed ImpactTime 060417, Not Passed: IMFO_WhenToStartMotor
-  Motor_Test();     //Written (071917) but Not Passed Yet
+  //Motor_Test();     //Written (071917) but Not Passed Yet
 
   while (true);
 }
