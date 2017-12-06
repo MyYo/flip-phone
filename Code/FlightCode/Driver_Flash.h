@@ -4,7 +4,7 @@
 #include "Arduino.h"
 
 void Flash_Init();
-void Flash_Log(String Message);
+void Flash_Log(String message);
 void Flash_Close();
 
 #endif

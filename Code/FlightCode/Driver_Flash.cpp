@@ -9,7 +9,7 @@
 #define FLASH_SPI_PORT SPI1
 #define FILE_NAME      "data.txt"
 
-File dataFile;
+File flashDataFile;
 Adafruit_SPIFlash flash(FLASH_SS, &FLASH_SPI_PORT);
 Adafruit_W25Q16BV_FatFs fatfs(flash);
 
@@ -25,8 +25,8 @@ void Flash_Init()
         Serial.println("Could not mount FS!");
         return;
     }
-    dataFile = fatfs.open(FILE_NAME, FILE_WRITE);
-    if (!dataFile) 
+    flashDataFile = fatfs.open(FILE_NAME, FILE_WRITE);
+    if (!flashDataFile) 
     {
         Serial.println("Could not open file to log to!");
     }
@@ -34,10 +34,10 @@ void Flash_Init()
 
 void Flash_Log(String message)
 {
-	dataFile.println(message);
+	flashDataFile.println(message);
 }
 
 void Flash_Close()
 {
-	dataFile.close();
+	flashDataFile.close();
 }
