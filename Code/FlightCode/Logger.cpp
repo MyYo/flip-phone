@@ -3,17 +3,14 @@
 #include "wire.h"
 
 #ifdef LOG_TO_SD
-//Include SD Card dirver only if SD card is used
 #include "Driver_SDCard.h"
-#endif
-
-#ifdef LOG_TO_FLASH
+#elif defined LOG_TO_FLASH
 #include "Driver_Flash.h"
 #endif
 
-#define N_OF_LOG_FILEDS 20 //N fields
+#define N_OF_LOG_FIELDS 20
 
-float lineData[N_OF_LOG_FILEDS];
+float lineData[N_OF_LOG_FIELDS];
 unsigned short logicState;
 unsigned long timems;
 String lineNote;
@@ -63,6 +60,8 @@ void Log_Init ()
 {
 #ifdef LOG_TO_SD
 	SD_Init();
+#elif defined LOG_TO_FLASH
+    Flash_Init();
 #else
 	Serial.begin(9600);
 	Wire.begin();
@@ -80,6 +79,8 @@ void logWrite(String message)
 {
 #ifdef LOG_TO_SD
 	SD_Log(message);
+#elif defined LOG_TO_FLASH
+    Flash_Log(message);
 #else
 	Serial.println(message);
 #endif
@@ -90,8 +91,8 @@ void Log_Close ()
 	logWrite("Closing Log");
 #ifdef LOG_TO_SD
 	SD_Close();
-#else
-  
+#elif defined LOG_TO_FLASH
+    Flash_Close(); 
 #endif
 }
 
