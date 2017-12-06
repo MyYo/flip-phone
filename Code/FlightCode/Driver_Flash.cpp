@@ -10,6 +10,8 @@
 #define FILE_NAME      "data.txt"
 
 File dataFile;
+Adafruit_SPIFlash flash(FLASH_SS, &FLASH_SPI_PORT);
+Adafruit_W25Q16BV_FatFs fatfs(flash);
 
 void Flash_Init()
 {
