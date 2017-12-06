@@ -20,7 +20,7 @@ int nFields;
 //Deletes all data from line
 void clearLine ()
 {
-	for (int i=0;i<N_OF_LOG_FILEDS;i++)
+	for (int i=0;i<N_OF_LOG_FIELDS;i++)
 	{
 		lineData[i]=0;
 	}
@@ -98,8 +98,8 @@ void Log_Close ()
 
 void Log_DefineNextField (String fName, String fUnit)
 {
-	if (nFields >= (N_OF_LOG_FILEDS))
-		logWrite("Too many loged fields, consider increasing N_OF_LOG_FILEDS");
+	if (nFields >= (N_OF_LOG_FIELDS))
+		logWrite("Too many loged fields, consider increasing N_OF_LOG_FIELDS");
 
 	fNames += fName + " [" + fUnit + "],";
 	nFields++;
@@ -107,8 +107,8 @@ void Log_DefineNextField (String fName, String fUnit)
 }
 void Log_SetData (int fI, float data)
 {
-	if (fI >= (N_OF_LOG_FILEDS))
-		logWrite("Too many loged fields, consider increasing N_OF_LOG_FILEDS");
+	if (fI >= (N_OF_LOG_FIELDS))
+		logWrite("Too many loged fields, consider increasing N_OF_LOG_FIELDS");
 	else
 		lineData[fI] = data;
 }
