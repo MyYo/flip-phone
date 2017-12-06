@@ -27,31 +27,32 @@ void clearLine ()
 }
 
 //If Compiling for QDUINOMINI, use LED desplay to indicate logic state
-#ifdef ARDUINO_AVR_QDUINOMINI1
-#include "Qduino.h"
-qduino q;
-void LED_Init ()
-{
-	q.setup();
+#ifdef ARDUINO_SAMD_FEATHER_M0_EXPRESS
+#include <Adafruit_NeoPixel.h>
+#define PIN8 8
+Adafruit_NeoPixel strip = Adafruit_NeoPixel(1, PIN8);
+void LED_Init() {
+	strip.begin();
+	strip.show(); // Initialize all pixels to 'off'
 }
 void LED_SetColor(unsigned short Color)
 {
-	switch(Color%8)
+	switch (Color % 8)
 	{
-		case 0: q.setRGB("red"); break;
-		case 1: q.setRGB("green"); break;
-		case 2: q.setRGB("blue"); break;
-		case 3: q.setRGB("orange"); break;
-		case 4: q.setRGB("cyan"); break;
-		case 5: q.setRGB("purple"); break;
-		case 6: q.setRGB("pink"); break;
-		case 7: q.setRGB("white"); break;
+	case 0: strip.setPixelColor(0, 255, 0, 0); break;   //Red
+	case 1: strip.setPixelColor(0, 0, 255, 0); break;   //Green
+	case 2: strip.setPixelColor(0, 0, 0, 255); break;   //Blue
+	case 3: strip.setPixelColor(0, 255, 25, 0); break;  //Orange
+	case 4: strip.setPixelColor(0, 0, 255, 150); break; //Cyan
+	case 5: strip.setPixelColor(0, 255, 0, 255); break; //Purple
+	case 6: strip.setPixelColor(0, 255, 50, 50); break; //Pink
+	case 7: strip.setPixelColor(0, 255, 255, 255); break; //White
 	}
 }
 #else
 //No LED, No desplay
-void LED_Init (){}
-void LED_SetColor(unsigned short Color){};
+void LED_Init() {}
+void LED_SetColor(unsigned short Color) {};
 #endif
 
 
