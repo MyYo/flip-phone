@@ -42,7 +42,8 @@ void loop()
   }
     
   //Testers (uncomment if needed)
-  Log_Test();     //Passed for COM, SD 060317; Flash 120517
+  //Log_Test();     //Passed for COM, SD 060317; Flash 120517
+  LED_Test();
   //IMU_Test();     //Passed 060317
   //Dist_Test();    //Passed 060317
   //Or_Prop_Test(); //Written (072717) but Not Passed Yet

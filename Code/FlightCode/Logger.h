@@ -15,5 +15,6 @@ void Log_WriteLogHeader (); //Write log header
 void Log_WriteLine (); //Write data to log, no note
 
 void Log_Test (); //Tests main functions of loger
+void LED_Test (); //Tests LED
 
 #endif
