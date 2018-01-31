@@ -67,6 +67,7 @@ void RunLogic ()
 		{
 			//Too long has passed since start of the experiment / fall start. Close the log
 			Log_Close();
+			while (true); //Stay here forever
 		}
 		else
 		{
