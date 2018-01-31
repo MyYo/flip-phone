@@ -17,7 +17,7 @@
 ////////////////////////////////////
 //			    Name			        Value //[Units]
 const float freefallGThresh     = 0.5;	//[g] What is the acceleration threshold beyond which we say that we are in freefall? TBD
-const float restoredGThresh     = 1;    //[g] What is the acceleration threshold beyond which we say that we have landed? TBD
+const float restoredGThresh     = 0.5;  //[g] What is the acceleration threshold beyond which we say that we have landed? TBD
 const float aquisitionDuration  = 150;  //[msec]
 const float pingHalfFOV         = 45;   //[deg] Ping was tested to have full FOV of 90 degrees, so Half FOV = 45 degrees. TBD
 
