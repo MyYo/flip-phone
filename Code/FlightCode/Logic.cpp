@@ -107,12 +107,12 @@ void logicGatherData ()
 int lsBootUp(int prevLogicState)
 {
 	Log_Init();
-	Log_DefineNextField("AccMag","mg"); 
+	Log_DefineNextField("AccMag","g"); 
 	Log_DefineNextField("ZenitAng","deg"); 
 	Log_DefineNextField("omegaX","rad/sec"); 
 	Log_DefineNextField("omegaY","rad/sec"); 
 	Log_DefineNextField("omegaZ","rad/sec"); 
-	Log_DefineNextField("DistToGND","[m]"); 
+	Log_DefineNextField("DistToGND","m"); 
 	Log_DefineNextField("DistDevice","#");
 	Log_WriteLogHeader();
 

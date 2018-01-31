@@ -13,13 +13,13 @@
 #define LS_ERROR                7
 
 
-//Thresholds and Times, TBD: Update after experimenting with values
+//Thresholds and Times
 ////////////////////////////////////
 //			    Name			        Value //[Units]
-const float freefallGThresh = 0.5;	//[g] What is the acceleration threshold beyond which we say that we are in freefall?
-const float restoredGThresh = 1;    //[g] What is the acceleration threshold beyond which we say that we have landed?
+const float freefallGThresh = 0.5;	//[g] What is the acceleration threshold beyond which we say that we are in freefall? TBD
+const float restoredGThresh = 1;    //[g] What is the acceleration threshold beyond which we say that we have landed? TBD
 const float aquisitionTime  = 150;  //[msec]
-const float pingHalfFOV     = 45;   //[deg] Ping was tested to have full FOV of 90 degrees, so Half FOV = 45 degrees.
+const float pingHalfFOV     = 45;   //[deg] Ping was tested to have full FOV of 90 degrees, so Half FOV = 45 degrees. TBD
 
 
 void RunLogic ();
