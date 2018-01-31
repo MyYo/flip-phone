@@ -9,6 +9,7 @@
 #endif
 
 #define N_OF_LOG_FIELDS 20
+#define N_CHARS_PER_FIELD 15 //'space pad' unused charecters so lines will all 'look nice'
 
 float lineData[N_OF_LOG_FIELDS];
 unsigned short logicState;
@@ -108,12 +109,21 @@ void Log_Close ()
 #endif
 }
 
+//'space pad' unused charecters so lines will all 'look nice'
+String padWithSpaces(String str)
+{
+	String out = str;
+	for (out.length() < N_CHARS_PER_FIELD)
+		out = out + " ";
+	return out;
+}
+
 void Log_DefineNextField (String fName, String fUnit)
 {
 	if (nFields >= (N_OF_LOG_FIELDS))
 		logWrite("Too many loged fields, consider increasing N_OF_LOG_FIELDS");
 
-	fNames += fName + " [" + fUnit + "],";
+	fNames += padWithSpaces(fName + " [" + fUnit + "]") + ",";
 	nFields++;
 
 }
@@ -135,7 +145,7 @@ void Log_AddNote(String note) {lineNote += note + ".";}
 void Log_WriteLogHeader () //Write log header
 {
 	//Header
-	String message = "Time[msec]," + fNames + "LogicState,Notes";
+	String message = padWithSpaces("Time [msec]") + "," + fNames + padWithSpaces("LogicState") + ",Notes";
 	logWrite(message);
 }
 
@@ -143,9 +153,9 @@ void Log_WriteLine ()
 {
 	String message = String(timems) + ",";
 	for (int i=0;i<nFields;i++)
-		message += String(lineData[i]) + ",";
+		message += padWithSpaces(String(lineData[i])) + ",";
 
-	message += String(logicState) + "," +lineNote;
+	message += padWithSpaces(String(logicState)) + "," + lineNote;
 	logWrite(message);
 	clearLine();
 }
