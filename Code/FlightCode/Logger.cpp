@@ -40,14 +40,14 @@ void LED_SetColor(unsigned short Color)
 {
 	switch (Color % 8)
 	{
-	case 0: strip.setPixelColor(0, 255, 0, 0); break;   //Red
-	case 1: strip.setPixelColor(0, 0, 255, 0); break;   //Green
-	case 2: strip.setPixelColor(0, 0, 0, 255); break;   //Blue
-	case 3: strip.setPixelColor(0, 255, 25, 0); break;  //Orange
-	case 4: strip.setPixelColor(0, 0, 255, 150); break; //Cyan
-	case 5: strip.setPixelColor(0, 255, 0, 255); break; //Purple
-	case 6: strip.setPixelColor(0, 255, 50, 50); break; //Pink
-	case 7: strip.setPixelColor(0, 255, 255, 255); break; //White
+	case LS_BOOT_UP: strip.setPixelColor(0, 255, 0, 0); break;   //Red
+	case LS_STAND_BY: strip.setPixelColor(0, 0, 255, 0); break;   //Green
+	case LS_DISTANCE_AQUISITION: strip.setPixelColor(0, 0, 0, 255); break;   //Blue
+	case LS_IMPACT_FORECAST: strip.setPixelColor(0, 255, 25, 0); break;  //Orange
+	case LS_ENGINE_START: strip.setPixelColor(0, 0, 255, 150); break; //Cyan
+	case LS_ENGINE_SHUTDOWN: strip.setPixelColor(0, 255, 0, 255); break; //Purple
+	case LS_IMPACT: strip.setPixelColor(0, 255, 50, 50); break; //Pink
+	case LS_ERROR: strip.setPixelColor(0, 255, 255, 255); break; //White
 	}
 }
 #else
