@@ -2,7 +2,7 @@
 #include "quaternionFilters.h"
 #include "logger.h"
 
-unsigned long t0;
+unsigned long t0; //[msec]
 float zenitAngles[OR_PROP_TABLE_SIZE];  //[deg]
 
 //Save current step of propagation
@@ -23,6 +23,8 @@ void OrProp_SetInitialConditions (unsigned long tStart, float qt1, float qt2, fl
 	currentOmega[2] = omegaZ;
 
 	zenitAngles[currentTableIndex] = QtAngleToZenit (currentQt[0],currentQt[1],currentQt[2],currentQt[3]);
+
+	t0 = tStart;
 }
 
 void OrProp_Prop (int howManySteps) //How many table instances to enter in the propagation step
@@ -45,7 +47,9 @@ void OrProp_Prop (int howManySteps) //How many table instances to enter in the p
 }
 float OrProp_GetZenitAngle (unsigned long t) //Get Zenit angle at specific time [deg]
 {
-	int i = (int)(1.0*(float)(t-t0)/float(OR_PROP_STEP));
+	float dt = (float)t - (float)t0;
+
+	int i = (int)(dt / OR_PROP_STEP); //Find Nearest Neigbor index of Zenit Angle from list
 
 	if (i>=currentTableIndex)
 	{

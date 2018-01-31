@@ -27,7 +27,7 @@ void RunLogic ()
 	while(true) //Loop forever
 	{
 		tCurrentTime = millis();
-		Log_SetTime(tCurrentTime);
+		Log_SetTime(tCurrentTime - tFallDetectTime_T0); //Before fall detection current time = millis(). After, time is measured from t0
 
 		//Hendle logic
 		switch(currentState)
@@ -148,7 +148,7 @@ int lsStandBy(int prevLogicState)
 
 int lsDistanceAquisition(int prevLogicState)
 {
-	if (tCurrentTime < tFallDetectTime_T0+aquisitionTime)
+	if (tCurrentTime < tFallDetectTime_T0+aquisitionDuration)
 	{
 		//Aquire Data
 		float ang = OrProp_GetZenitAngle (tCurrentTime); //[deg]
@@ -176,6 +176,7 @@ int lsDistanceAquisition(int prevLogicState)
 	else
 	{
 		//Aqusition Time is Over
+		tEndOfDataAquisitionTime_T1 = tCurrentTime;
 		Dist_SetActiveDevice(NO_DEVICE_SELECTED); //Disable distance aquisition
 
 		return LS_IMPACT_FORECAST;
@@ -184,12 +185,12 @@ int lsDistanceAquisition(int prevLogicState)
 int lsImpactForecast(int prevLogicState)
 {
 	//Compute time of impact
-	tTimeOfImpact_T2_Predicted = IMFO_PredictTimeofImpact()+tFallDetectTime_T0;
-	Log_AddNote("Predicted T2=" + String(tTimeOfImpact_T2_Predicted) + "[msec]");
+	tTimeOfImpact_T2_Predicted = IMFO_PredictTimeofImpact() + tFallDetectTime_T0;
+	Log_AddNote("Predicted T2-T0=" + String(tTimeOfImpact_T2_Predicted - tFallDetectTime_T0) + "[msec]");
 
 	//Compute Angle at time of impact
 	float angleAtT2 = OrProp_GetZenitAngle (tTimeOfImpact_T2_Predicted);
-	Log_AddNote("Predicted AngT2=" + String(angleAtT2) + "[deg]");
+	Log_AddNote("Predicted Ang@T2=" + String(angleAtT2) + "[deg]");
 
 	tMotorStartTime = IMFO_WhenToStartMotor (tTimeOfImpact_T2_Predicted, angleAtT2);
 	if (tMotorStartTime == 0)
@@ -213,14 +214,15 @@ int lsMotorStart(int prevLogicState)
 	else
 	{
 		//Start Motor!
-   
-    Log_AddNote("Motor Start");
-    if(motorPolarization){
-      Motor_StartForward();
-    }
-    else {
-      Motor_StartBackward();
-    }
+		Log_AddNote("Motor Start");
+		if(motorPolarization)
+		{
+			Motor_StartForward();
+		}
+		else 
+		{
+			Motor_StartBackward();
+		}
 		
 		return LS_ENGINE_SHUTDOWN;
 	}
