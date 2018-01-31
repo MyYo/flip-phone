@@ -166,10 +166,12 @@ void Log_Test ()
   Log_Close();
 }
 
-void LED_Test() {
+void LED_Test() 
+{
     LED_Init();
-    for (int i = 0; i < 8; i++) {
-        LED_SetColor(i);
+    for (int i = 0; i < 8; i++) 
+	{
+		LED_SetColor(i);
         delay(1000);
     }
 }
