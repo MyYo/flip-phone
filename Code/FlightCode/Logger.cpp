@@ -113,23 +113,9 @@ void Log_Close ()
 String padWithSpaces(String str)
 {
 	String out = str;
-
-	int pad = N_CHARS_PER_FIELD - out.length();
-	if (pad <= 0)
-		return str;
-
-	int padL = pad / 2;
-	int padR = pad - padL;
-
-	String padLs = "";
-	while (padLs.length() < padL)
-		padLs = padLs + " ";
-	
-	padRs = padLs;
-	while (padRs.length() < padR)
-		padRs = padRs + " ";
-	
-	return padLs + out + padRs;
+	for (out.length() < N_CHARS_PER_FIELD)
+		out = out + " ";
+	return out;
 }
 
 void Log_DefineNextField (String fName, String fUnit)
