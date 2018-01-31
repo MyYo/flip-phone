@@ -38,17 +38,27 @@ void LED_Init() {
 }
 void LED_SetColor(unsigned short Color)
 {
+	const float dimmingFactor = 0.5; //1.0 - maximum power, 0 - no power at all
+
+	//Select Color
+	float r = 0; float g = 0;  float b = 0; 
 	switch (Color % 8)
 	{
-	case LS_BOOT_UP: strip.setPixelColor(0, 255, 0, 0); break;   //Red
-	case LS_STAND_BY: strip.setPixelColor(0, 0, 255, 0); break;   //Green
-	case LS_DISTANCE_AQUISITION: strip.setPixelColor(0, 0, 0, 255); break;   //Blue
-	case LS_IMPACT_FORECAST: strip.setPixelColor(0, 255, 25, 0); break;  //Orange
-	case LS_ENGINE_START: strip.setPixelColor(0, 0, 255, 150); break; //Cyan
-	case LS_ENGINE_SHUTDOWN: strip.setPixelColor(0, 255, 0, 255); break; //Purple
-	case LS_IMPACT: strip.setPixelColor(0, 255, 50, 50); break; //Pink
-	case LS_ERROR: strip.setPixelColor(0, 255, 255, 255); break; //White
+	case LS_BOOT_UP:				r = 255; g = 025; break; //Orange
+	case LS_STAND_BY:				r = 255; break; //Red
+	case LS_DISTANCE_AQUISITION:	g = 255; break; //Green
+	case LS_IMPACT_FORECAST:		b = 255; break; //Blue
+	case LS_ENGINE_START:			r = 255; g = 050; b = 050; break; //Pink
+	case LS_ENGINE_SHUTDOWN:		r = 255; b = 255; break; //Purple
+	case LS_IMPACT:					g = 255; b = 150; break; //Cyan
+	case LS_ERROR:					r = 255; g = 255; b = 255; break; //White
 	}
+
+	//Turn LED On
+	strip.setPixelColor(0, 
+		(unsigned int)(r*dimmingFactor),
+		(unsigned int)(g*dimmingFactor), 
+		(unsigned int)(b*dimmingFactor));
     strip.show();
 }
 #else
