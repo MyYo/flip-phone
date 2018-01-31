@@ -49,6 +49,7 @@ void LED_SetColor(unsigned short Color)
 	case 6: strip.setPixelColor(0, 255, 50, 50); break; //Pink
 	case 7: strip.setPixelColor(0, 255, 255, 255); break; //White
 	}
+    strip.show();
 }
 #else
 //No LED, No desplay
