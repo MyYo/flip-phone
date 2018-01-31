@@ -119,7 +119,7 @@ int lsBootUp(int prevLogicState)
 	Dist_Init();
 	IMU_Init();
 	IMFO_Init();
-  Motor_Init();
+    Motor_Init();
 
 	return LS_STAND_BY;
 }
