@@ -32,7 +32,7 @@ void OrProp_Prop (int howManySteps) //How many table instances to enter in the p
 	for (int j=0;j<howManySteps;j++)
 	{
 		currentTableIndex++;
-		if (currentTableIndex>OR_PROP_TABLE_SIZE)
+		if (currentTableIndex>=OR_PROP_TABLE_SIZE)
 		{
 			//No more room in propagation table, we are done
 			return;
@@ -58,7 +58,9 @@ float OrProp_GetZenitAngle (unsigned long t) //Get Zenit angle at specific time 
 		return 0;
 	}
 	else
+	{
 		return zenitAngles[i];
+	}
 }
 
 void Or_Prop_Test ()

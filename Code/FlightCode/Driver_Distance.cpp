@@ -52,6 +52,7 @@ void  Dist_Measure()
  
 	// finally, measure the length of the incoming pulse
 	pulseDuration=pulseIn(pinNumber, HIGH);
+
 	// divide the pulse length by half
 	pulseDuration=pulseDuration/2; 
  

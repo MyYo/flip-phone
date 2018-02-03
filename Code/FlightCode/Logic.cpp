@@ -39,7 +39,6 @@ void RunLogic ()
 			nextState=lsStandBy(prevState);
 			break;
 		case LS_DISTANCE_AQUISITION:
-			Serial.println("hi");
 			nextState=lsDistanceAquisition(prevState);
 			break;
 		case LS_IMPACT_FORECAST:
@@ -98,9 +97,12 @@ void logicGatherData ()
 	Log_SetData(i,IMU_GetAccMag()); i++;
 	Log_SetData(i,IMU_GetZenitAngle()); i++;
 	float omega[3];
-	/*IMU_GetRotationRate (omega[0],omega[1],omega[2]);
-	for (int j=0;j<3;j++)
-		Log_SetData(i,omega[j]); i++;*/
+	IMU_GetRotationRate (omega[0],omega[1],omega[2]);
+	for (int j = 0; j < 3; j++)
+	{
+		Log_SetData(i, omega[j]);
+		i++;
+	}
 
 	//Distance Sensor Telemetry
 	float whichPing, currDist;
@@ -115,9 +117,9 @@ int lsBootUp(int prevLogicState)
 	Log_DefineNextField("IterLen", "msec"); //Iteration length
 	Log_DefineNextField("AccMag","g"); 
 	Log_DefineNextField("ZenitAng","deg"); 
-	/*Log_DefineNextField("omegaX","rad/sec"); 
+	Log_DefineNextField("omegaX","rad/sec"); 
 	Log_DefineNextField("omegaY","rad/sec"); 
-	Log_DefineNextField("omegaZ","rad/sec"); */
+	Log_DefineNextField("omegaZ","rad/sec"); 
 	Log_DefineNextField("DistToGND","mm"); 
 	Log_DefineNextField("DistDevice","#");
 	Log_WriteLogHeader();
@@ -268,8 +270,8 @@ int lsImpact (int prevLogicState)
 		tTimeOfImpact_T2_Actual = tCurrentTime;
 
 		Log_AddNote("Impact!");
-		Log_AddNote("Actual T2=" + String(tTimeOfImpact_T2_Actual) + "[msec]");
-		Log_AddNote("Actual AngT2=" + String(ang) + "[deg]");
+		Log_AddNote(" Actual T2-T0=" + String(tTimeOfImpact_T2_Actual - tFallDetectTime_T0) + "[msec]");
+		Log_AddNote(" Actual AngT2=" + String(ang) + "[deg]");
 
 		return LS_STAND_BY;
 	}
