@@ -9,7 +9,7 @@ void   Dist_Init ();   //Initializes Hardware
 void   Dist_SetActiveDevice(int whichPingDeviceToSet); 
 void   Dist_Measure(); //Measure distance 
 float  Dist_GetDistance(); //[m]
-void   Dist_ExportData(float dataArray[]); //Export data for logging
+void   Dist_ExportData(float &whichPing, float &currDist); //Export data for logging
 
 void   Dist_Test (); //Tester function
 

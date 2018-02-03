@@ -1,16 +1,15 @@
 ////////////////////////////////////////////////////////////////////////////////
-// Don't forget to check that all pins are assigned correctly (they currently
-// are not) and to set the experiment parameters (they currently are not).
-// Better yet, actually look through the code (especially the early variable
-// assignment parts) to make sure that things make sense before bricking your
-// device!
-////////////////////////////////////////////////////////////////////////////////
-//General Includes
+//Make sure you downolad Arduino libraries used here:
+// SPI Flash: https://learn.adafruit.com/adafruit-feather-m0-express-designed-for-circuit-python-circuitpython/using-spi-flash
+// Neo Pixel: https://github.com/adafruit/Adafruit_NeoPixel
+// In the above menue select Sketch -> Include Library -> Add .Zip Library and select downloded zips
+// Compile for Adafruit Feather M0 Express
 
+//General Includes
 #include "HardwareConfiguration.h"
 #include "Logger.h"
 
-//#define IS_RUN_OPERATIONAL //Comment out if you would like to run tests only
+#define IS_RUN_OPERATIONAL //Comment out if you would like to run tests only
 
 void setup()
 {
@@ -23,7 +22,7 @@ void setup()
 void loop()
 {
   //Operational mode
-  delay(1000); //delay before starting
+  delay(2000); //delay before starting
   RunLogic();
 }
 #else
@@ -42,8 +41,8 @@ void loop()
   }
     
   //Testers (uncomment if needed)
-  Log_Test();     //Passed for COM, SD 060317; Flash 120517
-  //LED_Test();       //Passed 013018
+  Log_Test();       //Passed for COM, SD 060317; Flash 120517
+  //LED_Test();     //Passed 013018
   //IMU_Test();     //Passed 060317
   //Dist_Test();    //Passed 060317
   //Or_Prop_Test(); //Written (072717) but Not Passed Yet

@@ -39,6 +39,7 @@ void RunLogic ()
 			nextState=lsStandBy(prevState);
 			break;
 		case LS_DISTANCE_AQUISITION:
+			Serial.println("hi");
 			nextState=lsDistanceAquisition(prevState);
 			break;
 		case LS_IMPACT_FORECAST:
@@ -87,33 +88,37 @@ void RunLogic ()
 
 void logicGatherData ()
 {
-	float tmp[20];
+	float tmp[N_OF_LOG_FIELDS];
 
 	int i=0;
+
+	Log_SetData(i, millis()-tCurrentTime); i++; //How long this iteration lasted
 
 	//IMU Telemetry
 	Log_SetData(i,IMU_GetAccMag()); i++;
 	Log_SetData(i,IMU_GetZenitAngle()); i++;
 	float omega[3];
-	IMU_GetRotationRate (omega[0],omega[1],omega[2]);
+	/*IMU_GetRotationRate (omega[0],omega[1],omega[2]);
 	for (int j=0;j<3;j++)
-		Log_SetData(i,omega[j]); i++;
+		Log_SetData(i,omega[j]); i++;*/
 
 	//Distance Sensor Telemetry
-	Dist_ExportData(tmp);
-	Log_SetData(i,tmp[1]); i++;
-	Log_SetData(i,tmp[2]); i++;
+	float whichPing, currDist;
+	Dist_ExportData(whichPing, currDist);
+	Log_SetData(i, currDist*1000); i++; //Distane converted to mm
+	Log_SetData(i, whichPing); i++;
 }
 
 int lsBootUp(int prevLogicState)
 {
 	Log_Init();
+	Log_DefineNextField("IterLen", "msec"); //Iteration length
 	Log_DefineNextField("AccMag","g"); 
 	Log_DefineNextField("ZenitAng","deg"); 
-	Log_DefineNextField("omegaX","rad/sec"); 
+	/*Log_DefineNextField("omegaX","rad/sec"); 
 	Log_DefineNextField("omegaY","rad/sec"); 
-	Log_DefineNextField("omegaZ","rad/sec"); 
-	Log_DefineNextField("DistToGND","m"); 
+	Log_DefineNextField("omegaZ","rad/sec"); */
+	Log_DefineNextField("DistToGND","mm"); 
 	Log_DefineNextField("DistDevice","#");
 	Log_WriteLogHeader();
 

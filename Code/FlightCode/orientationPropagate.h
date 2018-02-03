@@ -1,7 +1,7 @@
 #ifndef _OR_PROP_H_
 #define _OR_PROP_H_
 
-const float OR_PROP_STEP 10.0	 //[msec], how dense the grid is
+const float OR_PROP_STEP=10.0; //[msec], how dense the grid is
 #define OR_PROP_TABLE_SIZE 60 //N instances. Total propogation duration is OR_PROP_STEP*OR_PROP_TABLE_SIZE
 
 //Initialize propagation

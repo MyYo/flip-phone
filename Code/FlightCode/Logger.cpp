@@ -8,8 +8,7 @@
 #include "Driver_Flash.h"
 #endif
 
-#define N_OF_LOG_FIELDS 20
-#define N_CHARS_PER_FIELD 15 //'space pad' unused charecters so lines will all 'look nice'
+#define N_CHARS_PER_FIELD 20 //'space pad' unused charecters so lines will all 'look nice'
 
 float lineData[N_OF_LOG_FIELDS];
 unsigned short logicState;
@@ -30,6 +29,7 @@ void clearLine ()
 
 //If Compiling for QDUINOMINI, use LED desplay to indicate logic state
 #ifdef ARDUINO_SAMD_FEATHER_M0_EXPRESS
+#include "logic.h" //For the LED Stuff
 #include <Adafruit_NeoPixel.h>
 #define PIN8 8
 Adafruit_NeoPixel strip = Adafruit_NeoPixel(1, PIN8);
@@ -39,10 +39,10 @@ void LED_Init() {
 }
 void LED_SetColor(unsigned short Color)
 {
-	const float dimmingFactor = 0.5; //1.0 - maximum power, 0 - no power at all
+	const int dimmingFactor = 2; //% Brightness
 
 	//Select Color
-	float r = 0; float g = 0;  float b = 0; 
+	int r = 0; int g = 0;  int b = 0; 
 	switch (Color % 8)
 	{
 	case LS_BOOT_UP:				r = 255; g = 025; break; //Orange
@@ -57,9 +57,9 @@ void LED_SetColor(unsigned short Color)
 
 	//Turn LED On
 	strip.setPixelColor(0, 
-		(unsigned int)(r*dimmingFactor),
-		(unsigned int)(g*dimmingFactor), 
-		(unsigned int)(b*dimmingFactor));
+		(r*dimmingFactor)/100,
+		(g*dimmingFactor)/100, 
+		(b*dimmingFactor)/100);
     strip.show();
 }
 #else
@@ -113,7 +113,7 @@ void Log_Close ()
 String padWithSpaces(String str)
 {
 	String out = str;
-	for (out.length() < N_CHARS_PER_FIELD)
+	while (out.length() < N_CHARS_PER_FIELD)
 		out = out + " ";
 	return out;
 }
@@ -123,7 +123,7 @@ void Log_DefineNextField (String fName, String fUnit)
 	if (nFields >= (N_OF_LOG_FIELDS))
 		logWrite("Too many loged fields, consider increasing N_OF_LOG_FIELDS");
 
-	fNames += padWithSpaces(fName + " [" + fUnit + "]") + ",";
+	fNames += padWithSpaces(fName + " [" + fUnit + "],");
 	nFields++;
 
 }
@@ -145,17 +145,17 @@ void Log_AddNote(String note) {lineNote += note + ".";}
 void Log_WriteLogHeader () //Write log header
 {
 	//Header
-	String message = padWithSpaces("Time [msec]") + "," + fNames + padWithSpaces("LogicState") + ",Notes";
+	String message = padWithSpaces("Time [msec],") + fNames + padWithSpaces("LogicState,") + "Notes";
 	logWrite(message);
 }
 
 void Log_WriteLine ()
 {
-	String message = String(timems) + ",";
+	String message = padWithSpaces(String(timems) + ",");
 	for (int i=0;i<nFields;i++)
-		message += padWithSpaces(String(lineData[i])) + ",";
+		message += padWithSpaces(String(lineData[i]) + ",");
 
-	message += padWithSpaces(String(logicState)) + "," + lineNote;
+	message += padWithSpaces(String(logicState) + ",") + lineNote;
 	logWrite(message);
 	clearLine();
 }

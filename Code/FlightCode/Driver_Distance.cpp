@@ -4,7 +4,7 @@
 
 //Based on Ping Driver
 int whichPingDevice;
-float currentDistance; //m
+float currentDistance=-1; //m
 
 //Initializes Hardware
 void   Dist_Init ()
@@ -30,6 +30,7 @@ void  Dist_Measure()
 			pinNumber = PIN_PING_DOWNFACING;
 			break;
 		default:
+			currentDistance = -1;
 			return;
 	}
 	
@@ -58,10 +59,10 @@ void  Dist_Measure()
 	currentDistance = ((float)(pulseDuration)/29.0)/100.0;
 }
 float  Dist_GetDistance() {return currentDistance;}
-void   Dist_ExportData(float dataArray[]) //Export data for logging
+void   Dist_ExportData(float &whichPing, float &currDist) //Export data for logging
 {
-	dataArray[0] = whichPingDevice;
-	dataArray[1] = currentDistance;
+	whichPing = (float)whichPingDevice;
+	currDist = currentDistance;
 }
 
 //This function implements the Dist tester configuration
@@ -90,7 +91,7 @@ void   Dist_Test ()
     //Read dist and log values
     Log_SetTime(millis());
     Dist_Measure();
-    Dist_ExportData(dataArray);
+	Dist_ExportData(dataArray[0], dataArray[1]);
     for(int i=0;i<2;i++)
       Log_SetData(i,dataArray[i]);
   
