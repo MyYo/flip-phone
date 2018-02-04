@@ -101,6 +101,7 @@ void logWrite(String message)
 
 void Log_Close ()
 {
+	LED_Init(); //Shut down LED
 	logWrite("Closing Log");
 #ifdef LOG_TO_SD
 	SD_Close();

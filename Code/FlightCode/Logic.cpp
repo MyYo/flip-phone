@@ -183,7 +183,7 @@ int lsDistanceAquisition(int prevLogicState)
 	}
 	else
 	{
-		//Aqusition Time is Over
+		//Acquisition Time is Over
 		tEndOfDataAquisitionTime_T1 = tCurrentTime;
 		Dist_SetActiveDevice(NO_DEVICE_SELECTED); //Disable distance aquisition
 
@@ -203,8 +203,13 @@ int lsImpactForecast(int prevLogicState)
 	tMotorStartTime = IMFO_WhenToStartMotor (tTimeOfImpact_T2_Predicted, angleAtT2);
 	if (tMotorStartTime == 0)
 	{
-		//Error happend
+		//Error Happened
 		return LS_ERROR;
+	}
+	if (tTimeOfImpact_T2_Predicted - tMotorStartTime < minimalMotorActivity)
+	{
+		//Motor Activation Not Required
+		return LS_ENGINE_SHUTDOWN;
 	}
 
 	if (angleAtT2 < 0)
