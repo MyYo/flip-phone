@@ -68,7 +68,8 @@ unsigned long IMFO_WhenToStartMotor (unsigned predictedImpactTimeMs, float predi
 {
 	//TBD, do the magic
  
-	return predictedImpactTimeMs-100;
+	//return predictedImpactTimeMs-100;
+  return predictedImpactTimeMs;
 	return 0; //Returns error
 }
 

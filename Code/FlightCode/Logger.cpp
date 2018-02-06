@@ -34,6 +34,7 @@ void clearLine ()
 #define PIN8 8
 Adafruit_NeoPixel strip = Adafruit_NeoPixel(1, PIN8);
 void LED_Init() {
+  Wire.begin();
 	strip.begin();
 	strip.show(); // Initialize all pixels to 'off'
 }
@@ -74,10 +75,9 @@ void Log_Init ()
 #ifdef LOG_TO_SD
 	SD_Init();
 #elif defined LOG_TO_FLASH
-    Flash_Init();
+  Flash_Init();
 #else
 	Serial.begin(9600);
-	Wire.begin();
 #endif
 
 	LED_Init(); //If LED is available, display logic state as LED color

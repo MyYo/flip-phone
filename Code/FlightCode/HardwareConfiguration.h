@@ -14,8 +14,8 @@
 #define PIN_MOTOR_INB   9  //Motor
 
 //Select whether to log data through the com connection or SD card
-#define LOG_TO_COM
+//#define LOG_TO_COM
 //#define LOG_TO_SD
-//#define LOG_TO_FLASH
+#define LOG_TO_FLASH
 
 #endif
