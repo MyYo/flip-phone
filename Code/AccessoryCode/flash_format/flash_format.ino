@@ -71,14 +71,14 @@ void setup() {
   Serial.print("Flash chip JEDEC ID: 0x"); Serial.println(flash.GetJEDECID(), HEX);
 
   // Wait for user to send OK to continue.
-  Serial.setTimeout(30000);  // Increase timeout to print message less frequently.
+  /*Serial.setTimeout(30000);  // Increase timeout to print message less frequently.
   do {
     Serial.println("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
     Serial.println("This sketch will ERASE ALL DATA on the flash chip and format it with a new filesystem!");
     Serial.println("Type OK (all caps) and press enter to continue.");
     Serial.println("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
   }
-  while (!Serial.find("OK"));
+  while (!Serial.find("OK"));*/
 
   // Call fatfs activate to make it the active chip that receives low level fatfs
   // callbacks.  This is necessary before making any manual fatfs function calls
