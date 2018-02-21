@@ -9,7 +9,7 @@
 #include "HardwareConfiguration.h"
 #include "Logger.h"
 
-#define IS_RUN_OPERATIONAL //Comment out if you would like to run tests only
+//#define IS_RUN_OPERATIONAL //Comment out if you would like to run tests only
 
 void setup()
 {
@@ -41,7 +41,7 @@ void loop()
   }
     
   //Testers (uncomment if needed)
-  //Log_Test();       //Passed for COM, SD 060317; Flash 120517
+  Log_Test();       //Passed for COM, SD 060317; Flash 120517
   //LED_Test();     //Passed 013018
   //IMU_Test();     //Passed 060317
   //Dist_Test();    //Passed 060317
