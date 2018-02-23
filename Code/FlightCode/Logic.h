@@ -21,6 +21,7 @@ const float restoredGThresh      = 0.5; //[g] What is the acceleration threshold
 const float aquisitionDuration   = 150; //[msec]
 const float pingHalfFOV          = 36;  //[deg] Ping was tested to have half FOV.
 const long  minimalMotorActivity = 30;  //[msec] What is the minimal motor run time, below of which no activation happens
+const float minMotorVoltage		 = 5.5; //[V] minimal motor voltage for proper operation
 
 
 void RunLogic ();

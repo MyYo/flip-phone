@@ -13,6 +13,12 @@
 #define PIN_MOTOR_PWM  10  //Motor
 #define PIN_MOTOR_INB   9  //Motor
 
+//Safety and debug
+#define PIN_SAFETY_PLUG_SOURCE 5 
+#define PIN_SAFETY_PLUG_TERMINAL 6
+#define PIN_CAPACITOR_VOLTAGE A2
+#define PIN_LED_VOLTAGE_OK_INDICATOR 13 //When LED is on voltage is OK
+
 //Select whether to log data through the com connection or SD card
 //#define LOG_TO_COM
 //#define LOG_TO_SD

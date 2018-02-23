@@ -109,6 +109,20 @@ void logicGatherData ()
 	Dist_ExportData(whichPing, currDist);
 	Log_SetData(i, currDist*1000); i++; //Distane converted to mm
 	Log_SetData(i, whichPing); i++;
+
+	//Motor/Capacitor Voltage
+	float v = Motor_MeasureMotorDriverInputVoltage();
+	Log_SetData(i, v); i++;
+	if (v > 5.5) 
+	{
+		//Turn LED on if voltage is ok
+		digitalWrite(PIN_LED_VOLTAGE_OK_INDICATOR, HIGH);
+	}
+	else 
+	{
+		digitalWrite(PIN_LED_VOLTAGE_OK_INDICATOR, LOW);
+	}
+
 }
 
 int lsBootUp(int prevLogicState)
@@ -122,6 +136,7 @@ int lsBootUp(int prevLogicState)
 	Log_DefineNextField("omegaZ","rad/sec"); 
 	Log_DefineNextField("DistToGND","mm"); 
 	Log_DefineNextField("DistDevice","#");
+	Log_DefineNextField("Capacitor", "V");
 	Log_WriteLogHeader();
 
 	Dist_Init();
@@ -129,6 +144,25 @@ int lsBootUp(int prevLogicState)
 	IMFO_Init();
     Motor_Init();
 
+	//Initiate Capacitor Voltage Indicator
+	pinMode(PIN_LED_VOLTAGE_OK_INDICATOR, OUTPUT);
+	digitalWrite(PIN_LED_VOLTAGE_OK_INDICATOR, LOW);
+
+	//Initiate Safety Plug
+	pinMode(PIN_SAFETY_PLUG_SOURCE, OUTPUT);
+	pinMode(PIN_SAFETY_PLUG_TERMINAL, INPUT_PULLUP);
+	digitalWrite(PIN_SAFETY_PLUG_SOURCE, LOW);
+
+	//Wait until safety plug is removed
+	while (
+		!digitalRead(PIN_SAFETY_PLUG_TERMINAL) //Jumper is connected
+		)
+	{
+		Log_AddNote("Waiting For Safey Plug Removal");
+		Log_WriteLine();
+		delay(500); //Wait a bit before inquiring again
+	}
+	
 	return LS_STAND_BY;
 }
 int lsStandBy(int prevLogicState)

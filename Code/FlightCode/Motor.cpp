@@ -59,3 +59,12 @@ void   Motor_Test () //Tester function
   Motor_StartBackward();
   delay(500);
 }
+
+float Motor_MeasureMotorDriverInputVoltage()
+{
+	const float vdd = 3.3; //[V] - reference voltage 
+	const float devider = 2 * 1.0266;//Voltage devider factor to convert from measured voltage to motor driver input voltage
+	float analogValue = ((float)analogRead(PIN_CAPACITOR_VOLTAGE)) / 1024.0* vdd;
+
+	return analogValue * devider;
+}

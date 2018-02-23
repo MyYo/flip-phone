@@ -6,6 +6,8 @@ void   Motor_StartForward ();   //Make sure you call this function once, otherwi
 void   Motor_StartBackward ();  //Make sure you call this function once, otherwise the motor will start-break cycle.
 void   Motor_Break ();          //Make sure you call this function once, otherwise the motor will start-break cycle.
 
+float Motor_MeasureMotorDriverInputVoltage(); //Returns the motor driver input voltage (capacitor voltage)
+
 void   Motor_Test (); //Tester function
 
 #endif
