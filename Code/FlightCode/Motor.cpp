@@ -47,6 +47,15 @@ void   Motor_Break ()
   digitalWrite(PIN_MOTOR_PWM, HIGH); //Turn motor back on
 }
 
+float Motor_MeasureMotorDriverInputVoltage()
+{
+	const float vdd = 3.3; //[V] - reference voltage 
+	const float devider = 2 * 1.0266;//Voltage devider factor to convert from measured voltage to motor driver input voltage
+	float analogValue = ((float)analogRead(PIN_CAPACITOR_VOLTAGE)) / 1024.0* vdd;
+
+	return analogValue * devider;
+}
+
 void   Motor_Test () //Tester function
 {
 	//Start and stop motor
@@ -58,13 +67,4 @@ void   Motor_Test () //Tester function
   delay(500);
   Motor_StartBackward();
   delay(500);
-}
-
-float Motor_MeasureMotorDriverInputVoltage()
-{
-	const float vdd = 3.3; //[V] - reference voltage 
-	const float devider = 2 * 1.0266;//Voltage devider factor to convert from measured voltage to motor driver input voltage
-	float analogValue = ((float)analogRead(PIN_CAPACITOR_VOLTAGE)) / 1024.0* vdd;
-
-	return analogValue * devider;
 }

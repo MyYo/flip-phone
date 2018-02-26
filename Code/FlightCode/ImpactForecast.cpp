@@ -64,12 +64,33 @@ unsigned long IMFO_PredictTimeofImpact ()
 	return tImp;
 }
 
-unsigned long IMFO_WhenToStartMotor (unsigned predictedImpactTimeMs, float predictedZenitAngle) //Returns time to start motor, based on impact time and impact orientation
+//Utility function for IMFO_WHENTOStartMotor
+float x_from_b(float b)
 {
-	//TBD, do the magic
+	const float e = 2.71828182845905;
+	float s2b = sqrt(2 * b);
+	return s2b + 1 - (s2b - b) / (1 - pow(e, -s2b));
+}
+
+#include "Motor.h"
+unsigned long IMFO_WhenToStartMotor (unsigned predictedImpactTimeMs, float predictedZenitAngle) //Returns time to start motor, based on impact time and impact orientation. predictedZenitAngle is in [deg]
+{
+	return predictedImpactTimeMs;
+
+	//Measured constants, see presentation for details
+	const float E = 271; //[rad/sec]
+	float Vin = Motor_MeasureMotorDriverInputVoltage(); //[V]. Default value 5.75
+	const float tc = 0.3115; //[sec]
+	const float r = 20; //Unitless
+
+	float theta = abs(predictedZenitAngle) * PI / 180;
+	float b = theta*r / (tc*E*Vin);
  
-	//return predictedImpactTimeMs-100;
-  return predictedImpactTimeMs;
+	float t = x_from_b(b)*tc;
+	long  tMsec = t*1000.0;
+	
+	return predictedImpactTimeMs - tMsec;
+  
 	return 0; //Returns error
 }
 
@@ -112,9 +133,54 @@ void IMFO_Test_ImpactTime()
 	//7			0.9999	-0.0991	441  
 }
 
+void IMFO_Test_WhenToStartMotor()
+{
+	Log_Init();
+	Log_DefineNextField("Case", "n/a");
+	Log_WriteLogHeader();
+
+	//Test x_from_b
+	float x, xGT;
+	int i = 0;
+
+	Log_SetTime(millis());
+	Log_SetData(0, i); i++;
+	x = x_from_b(0.01478); xGT = 0.17698;
+	if (abs(x - xGT) * 314 < 2.0)
+		Log_AddNote("Pass");
+		
+	Log_SetTime(millis());
+	Log_SetData(0, i); i++;
+	x = x_from_b(0.05586); xGT = 0.35395;
+	if (abs(x - xGT) * 314 < 2.0)
+		Log_AddNote("Pass");
+
+	Log_SetTime(millis());
+	Log_SetData(0, i); i++;
+	x = x_from_b(0.11899); xGT = 0.53093;
+	if (abs(x - xGT) * 314 < 2.0)
+		Log_AddNote("Pass");
+
+	Log_SetTime(millis());
+	Log_SetData(0, i); i++;
+	x = x_from_b(0.20058); xGT = 0.70791;
+	if (abs(x - xGT) * 314 < 2.0)
+		Log_AddNote("Pass");
+
+	Log_SetTime(millis());
+	Log_SetData(0, i); i++;
+	x = x_from_b(0.29765); xGT = 0.88488;
+	if (abs(x - xGT) * 314 < 2.0)
+		Log_AddNote("Pass");
+
+	Log_Close();
+
+}
+
 void IMFO_Test()
 {
 	//Uncomment to choose to test impact time or when to start motor
 	IMFO_Test_ImpactTime();
+	IMFO_Test_WhenToStartMotor();
 }
 	
