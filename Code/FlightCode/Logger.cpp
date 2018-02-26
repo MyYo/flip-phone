@@ -36,7 +36,6 @@ void clearLine ()
 
 //If Compiling for QDUINOMINI, use LED desplay to indicate logic state
 #ifdef ARDUINO_SAMD_FEATHER_M0_EXPRESS
-#include "logic.h" //For the LED Stuff
 #include <Adafruit_NeoPixel.h>
 #define PIN8 8
 Adafruit_NeoPixel strip = Adafruit_NeoPixel(1, PIN8);
@@ -53,14 +52,14 @@ void LED_SetColor(unsigned short Color)
 	int r = 0; int g = 0;  int b = 0; 
 	switch (Color % 8)
 	{
-	case LS_BOOT_UP:				r = 255; g = 025; break; //Orange
-	case LS_STAND_BY:				r = 255; break; //Red
-	case LS_DISTANCE_AQUISITION:	g = 255; break; //Green
-	case LS_IMPACT_FORECAST:		b = 255; break; //Blue
-	case LS_ENGINE_START:			r = 255; g = 050; b = 050; break; //Pink
-	case LS_ENGINE_SHUTDOWN:		r = 255; b = 255; break; //Purple
-	case LS_IMPACT:					g = 255; b = 150; break; //Cyan
-	case LS_ERROR:					r = 255; g = 255; b = 255; break; //White
+	case 0:		r = 255; g = 025; break; //Orange
+	case 1:		r = 255; break; //Red
+	case 2:		g = 255; break; //Green
+	case 3:		b = 255; break; //Blue
+	case 4:		r = 255; g = 050; b = 050; break; //Pink
+	case 5:		r = 255; b = 255; break; //Purple
+	case 6:		g = 255; b = 150; break; //Cyan
+	case 7:		r = 255; g = 255; b = 255; break; //White
 	}
 
 	//Turn LED On

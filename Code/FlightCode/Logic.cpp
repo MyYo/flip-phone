@@ -44,10 +44,10 @@ void RunLogic ()
 		case LS_IMPACT_FORECAST:
 			nextState=lsImpactForecast(prevState);
 			break;
-		case LS_ENGINE_START:
+		case LS_WAIT_FOR_ENGINE_START:
 			nextState=lsMotorStart(prevState);
 			break;
-		case LS_ENGINE_SHUTDOWN:
+		case LS_WAIT_FOR_ENGINE_SHUTDOWN:
 			nextState=lsMotorShutdown(prevState);
 			break;
 		case LS_IMPACT:
@@ -243,7 +243,7 @@ int lsImpactForecast(int prevLogicState)
 	if (tTimeOfImpact_T2_Predicted - tMotorStartTime < minimalMotorActivity)
 	{
 		//Motor Activation Not Required
-		return LS_ENGINE_SHUTDOWN;
+		return LS_WAIT_FOR_ENGINE_SHUTDOWN;
 	}
 
 	if (angleAtT2 < 0)
@@ -251,13 +251,13 @@ int lsImpactForecast(int prevLogicState)
 	else 
 		motorPolarization = false; //Set Motor backward polarization
 
-	return LS_ENGINE_START;
+	return LS_WAIT_FOR_ENGINE_START;
 }
 int lsMotorStart(int prevLogicState)
 {
 	if (tCurrentTime < tMotorStartTime)
 		//Wait for the rigth time to start motor
-		return LS_ENGINE_START;
+		return LS_WAIT_FOR_ENGINE_START;
 	else
 	{
 		//Start Motor!
@@ -271,7 +271,7 @@ int lsMotorStart(int prevLogicState)
 			Motor_StartBackward();
 		}
 		
-		return LS_ENGINE_SHUTDOWN;
+		return LS_WAIT_FOR_ENGINE_SHUTDOWN;
 	}
 }
 int lsMotorShutdown(int prevLogicState)
@@ -288,7 +288,7 @@ int lsMotorShutdown(int prevLogicState)
 			return LS_IMPACT;
 		}
 		else
-			return LS_ENGINE_SHUTDOWN;
+			return WAIT_FOR_ENGINE_SHUTDOWN;
 	}
 	else 
 	{
