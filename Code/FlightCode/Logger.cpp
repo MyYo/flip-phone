@@ -10,6 +10,13 @@
 
 #define N_CHARS_PER_FIELD 20 //'space pad' unused charecters so lines will all 'look nice'
 
+//If Using Cache:
+#ifdef LOG_USING_CACHE
+#define LOG_CACHE_SIZE 1000 //Number of lines
+String cache[LOG_CACHE_SIZE];
+int cacheHead = 0;
+#endif
+
 float lineData[N_OF_LOG_FIELDS];
 unsigned short logicState;
 unsigned long timems;
@@ -69,15 +76,53 @@ void LED_Init() {}
 void LED_SetColor(unsigned short Color) {};
 #endif
 
-
-void Log_Init ()
+//Private functions for hardware interactions for logging
+/////////////////////////////////////////////////////////
+void logHWInit()
 {
 #ifdef LOG_TO_SD
 	SD_Init();
 #elif defined LOG_TO_FLASH
-  Flash_Init();
+	Flash_Init();
 #else
 	Serial.begin(9600);
+
+#ifdef LOG_USING_CACHE
+	//If using Cache initialization is done only when serial is connected
+	//Otherwise data will be 'spit out' before initialization complete
+	while (!Serial); 
+#endif 
+
+#endif
+}
+void logHWClose()
+{
+#ifdef LOG_TO_SD
+	SD_Close();
+#elif defined LOG_TO_FLASH
+	Flash_Close();
+#endif
+}
+void logHWWrite(String message)
+{
+#ifdef LOG_TO_SD
+	SD_Log(message);
+#elif defined LOG_TO_FLASH
+	Flash_Log(message);
+#else
+	Serial.println(message);
+#endif
+}
+/////////////////////////////////////////////////////////
+
+void Log_Init ()
+{
+#ifndef LOG_USING_CACHE
+	logHWInit();
+#else
+	//If Cache is not used, no need to initialize hardware at this point only at the end
+	Serial.begin(9600); // Initialize comm port for reporting cache errors
+	cacheHead = 0;
 #endif
 
 	LED_Init(); //If LED is available, display logic state as LED color
@@ -90,24 +135,38 @@ void Log_Init ()
 
 void logWrite(String message)
 {
-#ifdef LOG_TO_SD
-	SD_Log(message);
-#elif defined LOG_TO_FLASH
-    Flash_Log(message);
+#ifndef LOG_USING_CACHE
+	logHWWrite(message);
 #else
-	Serial.println(message);
+	//Using Cache
+	if (cacheHead < LOG_CACHE_SIZE)
+	{
+		cache[cacheHead] = message;
+		cacheHead++;
+	}
+	else
+	{
+		Serial.println("Log cache has run out of memory!");
+	}
 #endif
+
 }
 
 void Log_Close ()
 {
 	LED_Init(); //Shut down LED
 	logWrite("Closing Log");
-#ifdef LOG_TO_SD
-	SD_Close();
-#elif defined LOG_TO_FLASH
-    Flash_Close(); 
+
+#ifndef LOG_USING_CACHE
+	logHWClose();
+#else
+	//If Cache is not used, open HW interface, write all messages and close
+	logHWInit();
+	for (int i = 0; i < cacheHead; i++)
+		logHWWrite(cache[i]);
+	logHWClose();
 #endif
+	
 }
 
 //'space pad' unused charecters so lines will all 'look nice'
