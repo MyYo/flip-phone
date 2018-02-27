@@ -52,7 +52,7 @@ void LED_SetColor(unsigned short Color)
 	int r = 0; int g = 0;  int b = 0; 
 	switch (Color % 8)
 	{
-	case 0:		r = 255; g = 025; break; //Orange
+	case 0:		r = 255; g = 100; break; //Orange
 	case 1:		r = 255; break; //Red
 	case 2:		g = 255; break; //Green
 	case 3:		b = 255; break; //Blue
