@@ -40,7 +40,7 @@ void OrProp_Prop (int howManySteps) //How many table instances to enter in the p
 
 
 		//TBD integrate equations
-		//
+		//Take currentQt, propagate it by OR_PROP_STEP msec
 
 		zenitAngles[currentTableIndex] = QtAngleToZenit (currentQt[0],currentQt[1],currentQt[2],currentQt[3]);
 	}
