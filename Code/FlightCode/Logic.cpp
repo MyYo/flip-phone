@@ -5,6 +5,7 @@
 #include "OrientationPropagate.h"
 #include "ImpactForecast.h"
 #include "Motor.h"
+#include "HardwareConfiguration.h"
 
 //Timers
 unsigned long tCurrentTime; //[ms]
@@ -288,7 +289,7 @@ int lsMotorShutdown(int prevLogicState)
 			return LS_IMPACT;
 		}
 		else
-			return WAIT_FOR_ENGINE_SHUTDOWN;
+			return LS_WAIT_FOR_ENGINE_SHUTDOWN;
 	}
 	else 
 	{
