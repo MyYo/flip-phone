@@ -89,7 +89,10 @@ void logHWInit()
 #ifdef LOG_USING_CACHE
 	//If using Cache initialization is done only when serial is connected
 	//Otherwise data will be 'spit out' before initialization complete
-	while (!Serial); 
+	while (!Serial)
+	{
+		delay(100);
+	}
 #endif 
 
 #endif
