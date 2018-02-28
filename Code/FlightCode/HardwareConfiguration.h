@@ -21,7 +21,6 @@
 
 //Select whether to log data through the com connection or SD card
 #define LOG_TO_COM
-//#define LOG_TO_SD
 //#define LOG_TO_FLASH
 #define LOG_USING_CACHE //When defined, log will be cashed and written upon closure. Comment out to log on-the-fly
 #endif

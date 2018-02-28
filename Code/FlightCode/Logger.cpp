@@ -2,9 +2,7 @@
 #include "Logger.h"
 #include "wire.h"
 
-#ifdef LOG_TO_SD
-#include "Driver_SDCard.h"
-#elif defined LOG_TO_FLASH
+#ifdef LOG_TO_FLASH
 #include "Driver_Flash.h"
 #endif
 
@@ -79,9 +77,7 @@ void LED_SetColor(unsigned short Color) {};
 /////////////////////////////////////////////////////////
 void logHWInit()
 {
-#ifdef LOG_TO_SD
-	SD_Init();
-#elif defined LOG_TO_FLASH
+#ifdef LOG_TO_FLASH
 	Flash_Init();
 #else
 	Serial.begin(9600);
@@ -93,23 +89,24 @@ void logHWInit()
 	{
 		delay(100);
 	}
+	for (int i = 0; i < 4; i++)
+	{
+		Serial.println("Start Printing Cache");
+		delay(1000);
+	}
 #endif 
 
 #endif
 }
 void logHWClose()
 {
-#ifdef LOG_TO_SD
-	SD_Close();
-#elif defined LOG_TO_FLASH
+#ifdef defined LOG_TO_FLASH
 	Flash_Close();
 #endif
 }
 void logHWWrite(String message)
 {
-#ifdef LOG_TO_SD
-	SD_Log(message);
-#elif defined LOG_TO_FLASH
+#ifdef LOG_TO_FLASH
 	Flash_Log(message);
 #else
 	Serial.println(message);
