@@ -89,11 +89,8 @@ void logHWInit()
 	{
 		delay(100);
 	}
-	for (int i = 0; i < 4; i++)
-	{
-		Serial.println("Start Printing Cache");
-		delay(1000);
-	}
+	Serial.println("Start Printing Cache");
+	delay(1000);
 #endif 
 
 #endif
