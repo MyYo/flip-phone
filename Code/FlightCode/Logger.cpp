@@ -2,10 +2,6 @@
 #include "Logger.h"
 #include "wire.h"
 
-#ifdef LOG_TO_FLASH
-#include "Driver_Flash.h"
-#endif
-
 #define N_CHARS_PER_FIELD 20 //'space pad' unused charecters so lines will all 'look nice'
 
 //If Using Cache:
@@ -73,51 +69,14 @@ void LED_Init() {}
 void LED_SetColor(unsigned short Color) {};
 #endif
 
-//Private functions for hardware interactions for logging
-/////////////////////////////////////////////////////////
-void logHWInit()
-{
-#ifdef LOG_TO_FLASH
-	Flash_Init();
-#else
-	Serial.begin(9600);
-
-#ifdef LOG_USING_CACHE
-	//If using Cache initialization is done only when serial is connected
-	//Otherwise data will be 'spit out' before initialization complete
-	while (!Serial)
-	{
-		delay(100);
-	}
-	Serial.println("Start Printing Cache");
-	delay(1000);
-#endif 
-
-#endif
-}
-void logHWClose()
-{
-#ifdef defined LOG_TO_FLASH
-	Flash_Close();
-#endif
-}
-void logHWWrite(String message)
-{
-#ifdef LOG_TO_FLASH
-	Flash_Log(message);
-#else
-	Serial.println(message);
-#endif
-}
-/////////////////////////////////////////////////////////
-
 void Log_Init ()
 {
-#ifndef LOG_USING_CACHE
-	logHWInit();
-#else
-	//If Cache is not used, no need to initialize hardware at this point only at the end
-	Serial.begin(9600); // Initialize comm port for reporting cache errors
+	//Begin Serial
+	Serial.begin(9600);
+	while (!Serial) delay(100);
+
+#ifdef LOG_USING_CACHE
+	//Also Initialize Cache (will print cache at the end of the process)
 	cacheHead = 0;
 #endif
 
@@ -131,9 +90,9 @@ void Log_Init ()
 
 void logWrite(String message)
 {
-#ifndef LOG_USING_CACHE
-	logHWWrite(message);
-#else
+	Serial.println(message);
+
+#ifdef LOG_USING_CACHE
 	//Using Cache
 	if (cacheHead < LOG_CACHE_SIZE)
 	{
@@ -148,21 +107,23 @@ void logWrite(String message)
 
 }
 
+#ifdef LOG_USING_CACHE
+#include "Driver_SafetyPin.h"
+#endif
+
 void Log_Close ()
 {
 	LED_Init(); //Shut down LED
 	logWrite("Closing Log");
 
-#ifndef LOG_USING_CACHE
-	logHWClose();
-#else
+#ifdef LOG_USING_CACHE
 	//If Cache is not used, open HW interface, write all messages and close
-	logHWInit();
+	while (!SafetyPin_IsConnected()) delay(1000); //Waiting for Safety pin to be connected
+		
+	Serial.println("Connected, Printing Cache");
 	for (int i = 0; i < cacheHead; i++)
-		logHWWrite(cache[i]);
-	logHWClose();
+		Serial.println(cache[i]);
 #endif
-	
 }
 
 //'space pad' unused charecters so lines will all 'look nice'

@@ -148,33 +148,37 @@ void IMFO_Test_WhenToStartMotor()
 	x = x_from_b(0.01478); xGT = 0.17698;
 	if (abs(x - xGT) * 314 < 2.0)
 		Log_AddNote("Pass");
+  Log_WriteLine();
 		
 	Log_SetTime(millis());
 	Log_SetData(0, i); i++;
 	x = x_from_b(0.05586); xGT = 0.35395;
 	if (abs(x - xGT) * 314 < 2.0)
 		Log_AddNote("Pass");
+  Log_WriteLine();
 
 	Log_SetTime(millis());
 	Log_SetData(0, i); i++;
 	x = x_from_b(0.11899); xGT = 0.53093;
 	if (abs(x - xGT) * 314 < 2.0)
 		Log_AddNote("Pass");
-
+  Log_WriteLine();
+  
 	Log_SetTime(millis());
 	Log_SetData(0, i); i++;
 	x = x_from_b(0.20058); xGT = 0.70791;
 	if (abs(x - xGT) * 314 < 2.0)
 		Log_AddNote("Pass");
-
+  Log_WriteLine();
+  
 	Log_SetTime(millis());
 	Log_SetData(0, i); i++;
 	x = x_from_b(0.29765); xGT = 0.88488;
 	if (abs(x - xGT) * 314 < 2.0)
 		Log_AddNote("Pass");
-
+  Log_WriteLine();
+  
 	Log_Close();
-
 }
 
 void IMFO_Test()

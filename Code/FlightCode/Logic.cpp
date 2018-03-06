@@ -2,6 +2,7 @@
 #include "logger.h"
 #include "Driver_IMU.h"
 #include "Driver_Distance.h"
+#include "Driver_SafetyPin.h"
 #include "OrientationPropagate.h"
 #include "ImpactForecast.h"
 #include "Motor.h"
@@ -22,7 +23,7 @@ void logicGatherData ();
 void RunLogic ()
 {
 	int currentState = LS_BOOT_UP;
-	int prevState = LS_BOOT_UP;
+	int prevState = LS_OFF;
 	int nextState = LS_BOOT_UP;
 
 	while(true) //Loop forever
@@ -128,40 +129,38 @@ void logicGatherData ()
 
 int lsBootUp(int prevLogicState)
 {
-	Log_Init();
-	Log_DefineNextField("IterLen", "msec"); //Iteration length
-	Log_DefineNextField("AccMag","g"); 
-	Log_DefineNextField("ZenitAng","deg"); 
-	Log_DefineNextField("omegaX","rad/sec"); 
-	Log_DefineNextField("omegaY","rad/sec"); 
-	Log_DefineNextField("omegaZ","rad/sec"); 
-	Log_DefineNextField("DistToGND","mm"); 
-	Log_DefineNextField("DistDevice","#");
-	Log_DefineNextField("Capacitor", "V");
-	Log_WriteLogHeader();
+	if (prevLogicState == LS_OFF)
+	{
+		//Run only from off state
 
-	Dist_Init();
-	IMU_Init();
-	IMFO_Init();
-    Motor_Init();
+		Log_Init();
+		Log_DefineNextField("IterLen", "msec"); //Iteration length
+		Log_DefineNextField("AccMag", "g");
+		Log_DefineNextField("ZenitAng", "deg");
+		Log_DefineNextField("omegaX", "rad/sec");
+		Log_DefineNextField("omegaY", "rad/sec");
+		Log_DefineNextField("omegaZ", "rad/sec");
+		Log_DefineNextField("DistToGND", "mm");
+		Log_DefineNextField("DistDevice", "#");
+		Log_DefineNextField("Capacitor", "V");
+		Log_WriteLogHeader();
 
-	//Initiate Capacitor Voltage Indicator
-	pinMode(PIN_LED_VOLTAGE_OK_INDICATOR, OUTPUT);
-	digitalWrite(PIN_LED_VOLTAGE_OK_INDICATOR, LOW);
+		Dist_Init();
+		IMU_Init();
+		IMFO_Init();
+		Motor_Init();
+		SafetyPin_Init();
 
-	//Initiate Safety Plug
-	pinMode(PIN_SAFETY_PLUG_SOURCE, OUTPUT);
-	pinMode(PIN_SAFETY_PLUG_TERMINAL, INPUT_PULLUP);
-	digitalWrite(PIN_SAFETY_PLUG_SOURCE, LOW);
+		//Initiate Capacitor Voltage Indicator
+		pinMode(PIN_LED_VOLTAGE_OK_INDICATOR, OUTPUT);
+		digitalWrite(PIN_LED_VOLTAGE_OK_INDICATOR, LOW);
+	}
 
 	//Wait until safety plug is removed
-	while (
-		!digitalRead(PIN_SAFETY_PLUG_TERMINAL) //Jumper is connected
-		)
+	if (SafetyPin_IsConnected())
 	{
-		Log_AddNote("Waiting For Safey Plug Removal");
-		Log_WriteLine();
 		delay(500); //Wait a bit before inquiring again
+		return LS_BOOT_UP;
 	}
 	
 	return LS_STAND_BY;

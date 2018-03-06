@@ -3,6 +3,7 @@
 
 //Logic States
 ////////////////////////////////////
+#define LS_OFF						-1
 #define LS_BOOT_UP                   0
 #define LS_STAND_BY                  1
 #define LS_DISTANCE_AQUISITION       2

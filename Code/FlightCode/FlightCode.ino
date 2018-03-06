@@ -1,6 +1,6 @@
 ////////////////////////////////////////////////////////////////////////////////
 //Make sure you downolad Arduino libraries used here:
-// SPI Flash: https://learn.adafruit.com/adafruit-feather-m0-express-designed-for-circuit-python-circuitpython/using-spi-flash
+// SPI Flash: https://learn.adafruit.com/adafruit-feather-m0-express-designed-for-circuit-python-circuitpython/using-spi-flash (Not in use)
 // Neo Pixel: https://github.com/adafruit/Adafruit_NeoPixel
 // In the above menue select Sketch -> Include Library -> Add .Zip Library and select downloded zips
 // Compile for Adafruit Feather M0 Express
@@ -13,7 +13,7 @@
 
 void setup()
 {
-  Log_Init();
+  //All setup is done in the logic code
 }
 
 #ifdef IS_RUN_OPERATIONAL
@@ -33,6 +33,7 @@ void loop()
 
 void loop()
 {
+  Log_Init();
   //Blink before starting tests
   for (int i=0;i<4;i++)
   {
@@ -46,7 +47,7 @@ void loop()
   //IMU_Test();     //Passed 060317
   //Dist_Test();    //Passed 060317
   //Or_Prop_Test(); //Written (072717) but Not Passed Yet
-  //IMFO_Test();    //Passed ImpactTime 060417, Not Passed: IMFO_WhenToStartMotor
+  //IMFO_Test();    //Passed ImpactTime 060417, Passed IMFO_WhenToStartMotor 022718
   //Motor_Test();     //Written (071917) but Not Passed Yet
 
   while (true);
