@@ -20,5 +20,5 @@
 #define PIN_LED_VOLTAGE_OK_INDICATOR 13 //When LED is on voltage is OK
 
 //Logging
-//#define LOG_USING_CACHE //When defined, log will also be cashed and written upon closure.
+#define LOG_USING_CACHE //When defined, log will also be cashed and written upon closure.
 #endif

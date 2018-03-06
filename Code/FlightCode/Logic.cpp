@@ -58,32 +58,30 @@ void RunLogic ()
 		case LS_ERROR:
 			nextState=lsError(prevState);
 			break;
+		case LS_DUMP_DATA:
+			nextState = lsDumpData(prevState);
+			break;
+		}
+
+		//Global Change States
+		if (SafetyPin_IsConnected() && currentState != LS_BOOT_UP)
+		{
+			//Safety pin got reconnected, force state change
+			nextState = LS_DUMP_DATA;
 		}
 
 		//Log
-		if (
-			tFallDetectTime_T0>0 && (tCurrentTime-tFallDetectTime_T0>= 1*1000)  //If fall detected and x time passed since
-			|| 
-			tCurrentTime>= 30*1000 //Maximum time reached
-			)
-		{
-			//Too long has passed since start of the experiment / fall start. Close the log
-			Log_Close();
-			while (true); //Stay here forever
-		}
-		else
-		{
-			logicGatherData();
-			Log_SetLoigcState(currentState);
-			if (nextState != currentState)
-				Log_AddNote("State Changed");
-			Log_WriteLine();
-		}
+		logicGatherData();
+		Log_SetLoigcState(currentState);
+		if (nextState != currentState)
+			Log_AddNote("State Changed");
+		Log_WriteLine();
 
+		//Change logic state
 		prevState = currentState;
 		currentState = nextState;
 
-		//delay(10);
+		//delay(100);
 	}
 }
 
@@ -163,6 +161,8 @@ int lsBootUp(int prevLogicState)
 		return LS_BOOT_UP;
 	}
 	
+	//Wait a bit before changing to the next state
+	delay(1000);
 	return LS_STAND_BY;
 }
 int lsStandBy(int prevLogicState)
@@ -324,4 +324,13 @@ int lsImpact (int prevLogicState)
 int lsError(int prevLogicState)
 {
 	return LS_STAND_BY;
+}
+
+
+int lsDumpData(int prevLogicState)
+{
+	Log_DumpCache();
+	delay(1000);
+
+	return LS_STAND_BY; //Set next state to be standby, if plug is still not removed, logic will override and dump again
 }

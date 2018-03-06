@@ -18,15 +18,9 @@ String lineNote;
 String  fNames;
 int nFields;
 
-//Deletes all data from line
-void clearLine ()
-{
-	for (int i=0;i<N_OF_LOG_FIELDS;i++)
-	{
-		lineData[i]=0;
-	}
-	lineNote = "";
-}
+////////////////////////////////////////////////////////////////////////////////////////////////
+//LED
+////////////////////////////////////////////////////////////////////////////////////////////////
 
 //If Compiling for QDUINOMINI, use LED desplay to indicate logic state
 #ifdef ARDUINO_SAMD_FEATHER_M0_EXPRESS
@@ -34,7 +28,7 @@ void clearLine ()
 #define PIN8 8
 Adafruit_NeoPixel strip = Adafruit_NeoPixel(1, PIN8);
 void LED_Init() {
-  Wire.begin();
+	Wire.begin();
 	strip.begin();
 	strip.show(); // Initialize all pixels to 'off'
 }
@@ -42,9 +36,9 @@ void LED_SetColor(unsigned short Color)
 {
 	const int dimmingFactor = 2; //% Brightness
 
-	//Select Color
-	int r = 0; int g = 0;  int b = 0; 
-	switch (Color % 8)
+								 //Select Color
+	int r = 0; int g = 0;  int b = 0;
+	switch (Color % 9)
 	{
 	case 0:		r = 255; g = 100; break; //Orange
 	case 1:		r = 255; break; //Red
@@ -54,14 +48,15 @@ void LED_SetColor(unsigned short Color)
 	case 5:		r = 255; b = 255; break; //Purple
 	case 6:		g = 255; b = 150; break; //Cyan
 	case 7:		r = 255; g = 255; b = 255; break; //White
+	case 8:		r = 255; g = 255; b = 255; break; //Yellow
 	}
 
 	//Turn LED On
-	strip.setPixelColor(0, 
-		(r*dimmingFactor)/100,
-		(g*dimmingFactor)/100, 
-		(b*dimmingFactor)/100);
-    strip.show();
+	strip.setPixelColor(0,
+		(r*dimmingFactor) / 100,
+		(g*dimmingFactor) / 100,
+		(b*dimmingFactor) / 100);
+	strip.show();
 }
 #else
 //No LED, No desplay
@@ -69,61 +64,18 @@ void LED_Init() {}
 void LED_SetColor(unsigned short Color) {};
 #endif
 
-void Log_Init ()
+////////////////////////////////////////////////////////////////////////////////////////////////
+//Utilities, clear line, padding
+////////////////////////////////////////////////////////////////////////////////////////////////
+
+//Deletes all data from line
+void clearLine()
 {
-	//Begin Serial
-	Serial.begin(9600);
-	while (!Serial) delay(100);
-
-#ifdef LOG_USING_CACHE
-	//Also Initialize Cache (will print cache at the end of the process)
-	cacheHead = 0;
-#endif
-
-	LED_Init(); //If LED is available, display logic state as LED color
-
-	//Initiate filed
-	fNames="";
-	clearLine();
-	nFields = 0;
-}
-
-void logWrite(String message)
-{
-	Serial.println(message);
-
-#ifdef LOG_USING_CACHE
-	//Using Cache
-	if (cacheHead < LOG_CACHE_SIZE)
+	for (int i = 0; i<N_OF_LOG_FIELDS; i++)
 	{
-		cache[cacheHead] = message;
-		cacheHead++;
+		lineData[i] = 0;
 	}
-	else
-	{
-		Serial.println("Log cache has run out of memory!");
-	}
-#endif
-
-}
-
-#ifdef LOG_USING_CACHE
-#include "Driver_SafetyPin.h"
-#endif
-
-void Log_Close ()
-{
-	LED_Init(); //Shut down LED
-	logWrite("Closing Log");
-
-#ifdef LOG_USING_CACHE
-	//If Cache is not used, open HW interface, write all messages and close
-	while (!SafetyPin_IsConnected()) delay(1000); //Waiting for Safety pin to be connected
-		
-	Serial.println("Connected, Printing Cache");
-	for (int i = 0; i < cacheHead; i++)
-		Serial.println(cache[i]);
-#endif
+	lineNote = "";
 }
 
 //'space pad' unused charecters so lines will all 'look nice'
@@ -134,6 +86,78 @@ String padWithSpaces(String str)
 		out = out + " ";
 	return out;
 }
+
+////////////////////////////////////////////////////////////////////////////////////////////////
+//'Low Level' functionalities, init, writing, closing
+////////////////////////////////////////////////////////////////////////////////////////////////
+
+void Log_Init()
+{
+	//Begin Serial
+	Serial.begin(9600);
+
+#ifdef LOG_USING_CACHE
+	//Initialize Cache
+	cacheHead = 0;
+	for (int i = 0; i < LOG_CACHE_SIZE; i++)
+		cache[i] = "NA";
+#endif
+
+	LED_Init(); //If LED is available, display logic state as LED color
+
+	//Initiate filed
+	fNames = "";
+	clearLine();
+	nFields = 0;
+}
+
+void logWrite(String message)
+{
+	Serial.println(message);
+
+#ifdef LOG_USING_CACHE
+	//Using Cache
+	if (cacheHead >= LOG_CACHE_SIZE)
+		cacheHead = 0; //Rool over (circular cache)
+
+	cache[cacheHead] = message;
+	cacheHead++;
+#endif
+}
+
+void Log_Close()
+{
+	LED_Init(); //Shut down LED
+	logWrite("Closing Log");
+}
+
+void Log_DumpCache()
+{
+#ifdef LOG_USING_CACHE
+	//Begin Serial
+	Serial.begin(9600);
+	delay(1000);
+
+	Serial.println("Cache Print Begin");
+	Serial.println("-----------------");
+
+	//Circular cache, the past is just about to be 'run over'
+	//for (int i = cacheHead; i < LOG_CACHE_SIZE; i++)
+	//	Serial.println(cache[i]);
+
+	//Print currnent
+	for (int i = 0; i < cacheHead; i++)
+		Serial.println(cache[i]);
+
+	delay(1000*10);
+#else
+	Serial.println("Not Compiled for Cache");
+#endif
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////
+//One line functionalities, define header, set field, clear fields
+////////////////////////////////////////////////////////////////////////////////////////////////
 
 void Log_DefineNextField (String fName, String fUnit)
 {
@@ -177,6 +201,10 @@ void Log_WriteLine ()
 	clearLine();
 }
 
+////////////////////////////////////////////////////////////////////////////////////////////////
+//Tests
+////////////////////////////////////////////////////////////////////////////////////////////////
+
 //This function implements the log tester configuration
 //The idea is to print a demo log
 void Log_Test ()
@@ -200,7 +228,10 @@ void Log_Test ()
 
 	Log_WriteLine();
 
-  Log_Close();
+	//Cache
+	logWrite("Dumping Cache");
+	Log_DumpCache();
+	Log_Close();
 }
 
 void LED_Test() 

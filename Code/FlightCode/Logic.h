@@ -12,6 +12,7 @@
 #define LS_WAIT_FOR_ENGINE_SHUTDOWN  5
 #define LS_IMPACT                    6
 #define LS_ERROR                     7
+#define LS_DUMP_DATA				 8
 
 
 //Thresholds and Times
@@ -34,5 +35,6 @@ int lsMotorStart(int prevLogicState);
 int lsMotorShutdown(int prevLogicState);
 int lsImpact (int prevLogicState);
 int lsError(int prevLogicState);
+int lsDumpData(int prevLogicState);
 
 #endif
