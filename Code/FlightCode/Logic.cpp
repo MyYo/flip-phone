@@ -26,6 +26,8 @@ void RunLogic ()
 	int prevState = LS_OFF;
 	int nextState = LS_BOOT_UP;
 
+	long loopI = 0;
+	Log_Init();
 	while(true) //Loop forever
 	{
 		tCurrentTime = millis();
@@ -62,7 +64,7 @@ void RunLogic ()
 			nextState = lsDumpData(prevState);
 			break;
 		}
-
+		
 		//Global Change States
 		if (SafetyPin_IsConnected() && currentState != LS_BOOT_UP)
 		{
@@ -81,7 +83,9 @@ void RunLogic ()
 		prevState = currentState;
 		currentState = nextState;
 
-		//delay(100);
+		while (millis() <= tCurrentTime + 10); //Each iteration has a minimal size
+	
+		loopI++;
 	}
 }
 
@@ -103,7 +107,7 @@ void logicGatherData ()
 		Log_SetData(i, omega[j]);
 		i++;
 	}
-
+	
 	//Distance Sensor Telemetry
 	float whichPing, currDist;
 	Dist_ExportData(whichPing, currDist);
@@ -122,7 +126,7 @@ void logicGatherData ()
 	{
 		digitalWrite(PIN_LED_VOLTAGE_OK_INDICATOR, LOW);
 	}
-
+	
 }
 
 int lsBootUp(int prevLogicState)
@@ -152,6 +156,7 @@ int lsBootUp(int prevLogicState)
 		//Initiate Capacitor Voltage Indicator
 		pinMode(PIN_LED_VOLTAGE_OK_INDICATOR, OUTPUT);
 		digitalWrite(PIN_LED_VOLTAGE_OK_INDICATOR, LOW);
+		
 	}
 
 	//Wait until safety plug is removed
@@ -330,7 +335,7 @@ int lsError(int prevLogicState)
 int lsDumpData(int prevLogicState)
 {
 	Log_DumpCache();
-	delay(1000);
+	delay(1000 * 10);
 
 	return LS_STAND_BY; //Set next state to be standby, if plug is still not removed, logic will override and dump again
 }

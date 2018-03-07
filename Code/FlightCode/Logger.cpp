@@ -2,12 +2,14 @@
 #include "Logger.h"
 #include "wire.h"
 
-#define N_CHARS_PER_FIELD 20 //'space pad' unused charecters so lines will all 'look nice'
+#define N_CHARS_PER_FIELD    12 //'space pad' unused charecters so lines will all 'look nice'
+#define N_CHARS_PER_FIELDSTR "%12s"
 
 //If Using Cache:
 #ifdef LOG_USING_CACHE
-#define LOG_CACHE_SIZE 1000 //Number of lines
-String cache[LOG_CACHE_SIZE];
+#define LOG_CACHE_SIZE 75 //Number of lines
+#define CACHE_LINE_LENGTH ((N_OF_LOG_FIELDS + 2 + 1*2)*N_CHARS_PER_FIELD+30) //3 extra fields are time, logic state and note with equivalent of 2 fields
+char cache[LOG_CACHE_SIZE][CACHE_LINE_LENGTH+1]; //Fixed cache size, no dynamic allocation
 int cacheHead = 0;
 #endif
 
@@ -15,7 +17,9 @@ float lineData[N_OF_LOG_FIELDS];
 unsigned short logicState;
 unsigned long timems;
 String lineNote;
-String  fNames;
+
+String  headderLine1_Names;
+String  headderLine2_Units;
 int nFields;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
@@ -81,10 +85,13 @@ void clearLine()
 //'space pad' unused charecters so lines will all 'look nice'
 String padWithSpaces(String str)
 {
-	String out = str;
-	while (out.length() < N_CHARS_PER_FIELD)
-		out = out + " ";
-	return out;
+	char strBuff[N_CHARS_PER_FIELD + 2];
+	char outBuff[N_CHARS_PER_FIELD + 2];
+
+	str.toCharArray(strBuff, N_CHARS_PER_FIELD);
+	sprintf(outBuff, N_CHARS_PER_FIELDSTR, strBuff);
+
+	return String(outBuff);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
@@ -99,14 +106,17 @@ void Log_Init()
 #ifdef LOG_USING_CACHE
 	//Initialize Cache
 	cacheHead = 0;
-	for (int i = 0; i < LOG_CACHE_SIZE; i++)
-		cache[i] = "NA";
+	/*for (int i = 0; i < LOG_CACHE_SIZE; i++)
+	{
+		(String("NA")).toCharArray(cache[i], CACHE_LINE_LENGTH);
+	}*/
 #endif
 
 	LED_Init(); //If LED is available, display logic state as LED color
 
 	//Initiate filed
-	fNames = "";
+	headderLine1_Names = "";
+	headderLine2_Units = "";
 	clearLine();
 	nFields = 0;
 }
@@ -118,9 +128,14 @@ void logWrite(String message)
 #ifdef LOG_USING_CACHE
 	//Using Cache
 	if (cacheHead >= LOG_CACHE_SIZE)
-		cacheHead = 0; //Rool over (circular cache)
+	{
+		//Chache overflow
+		//cacheHead = 0; //Rool over (circular cache)
 
-	cache[cacheHead] = message;
+		return; //Do not fill cache anymore
+	}
+
+	message.toCharArray(cache[cacheHead], CACHE_LINE_LENGTH);
 	cacheHead++;
 #endif
 }
@@ -136,9 +151,9 @@ void Log_DumpCache()
 #ifdef LOG_USING_CACHE
 	//Begin Serial
 	Serial.begin(9600);
-	delay(1000);
+	delay(100);
 
-	Serial.println("Cache Print Begin");
+	Serial.println("Cache Dump Begin");
 	Serial.println("-----------------");
 
 	//Circular cache, the past is just about to be 'run over'
@@ -147,9 +162,10 @@ void Log_DumpCache()
 
 	//Print currnent
 	for (int i = 0; i < cacheHead; i++)
-		Serial.println(cache[i]);
+	{
+		Serial.println(String(cache[i]));
+	}
 
-	delay(1000*10);
 #else
 	Serial.println("Not Compiled for Cache");
 #endif
@@ -164,9 +180,9 @@ void Log_DefineNextField (String fName, String fUnit)
 	if (nFields >= (N_OF_LOG_FIELDS))
 		logWrite("Too many loged fields, consider increasing N_OF_LOG_FIELDS");
 
-	fNames += padWithSpaces(fName + " [" + fUnit + "],");
+	headderLine1_Names += padWithSpaces(fName + ",");
+	headderLine2_Units += padWithSpaces(fUnit + ",");
 	nFields++;
-
 }
 void Log_SetData (int fI, float data)
 {
@@ -181,13 +197,17 @@ void Log_SetLoigcState(unsigned short newState)
 	LED_SetColor(newState); //If LED is available, display logic state as LED color
 }
 void Log_SetTime(unsigned long time){timems= time;}
-void Log_AddNote(String note) {lineNote += note + ".";}
+void Log_AddNote(String note) {lineNote += String(note) + ".";}
 
 void Log_WriteLogHeader () //Write log header
 {
-	//Header
-	String message = padWithSpaces("Time [msec],") + fNames + padWithSpaces("LogicState,") + "Notes";
-	logWrite(message);
+	//Filed
+	String message1 = padWithSpaces("Time,") + headderLine1_Names + padWithSpaces("LogicState,") + " Notes";
+	logWrite(message1);
+
+	//Units
+	String message2 = padWithSpaces("msec,") + headderLine2_Units + padWithSpaces(",") + "";
+	logWrite(message2);
 }
 
 void Log_WriteLine ()

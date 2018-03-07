@@ -1,9 +1,9 @@
 #ifndef _LOGGER_H_
 #define _LOGGER_H_
 
-#define N_OF_LOG_FIELDS 20
-
 #include "Arduino.h"
+
+#define N_OF_LOG_FIELDS      16
 
 void Log_Init ();
 void Log_Close ();
