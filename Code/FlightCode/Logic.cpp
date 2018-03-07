@@ -34,6 +34,7 @@ void RunLogic ()
 		Log_SetTime(tCurrentTime - tFallDetectTime_T0); //Before fall detection current time = millis(). After, time is measured from t0
 
 		//Hendle logic
+		Log_SetLoigcState(currentState);
 		switch(currentState)
 		{
 		case LS_BOOT_UP:
@@ -74,7 +75,6 @@ void RunLogic ()
 
 		//Log
 		logicGatherData();
-		Log_SetLoigcState(currentState);
 		if (nextState != currentState)
 			Log_AddNote("State Changed");
 		Log_WriteLine();
@@ -260,23 +260,21 @@ int lsImpactForecast(int prevLogicState)
 }
 int lsMotorStart(int prevLogicState)
 {
-	if (tCurrentTime < tMotorStartTime)
-		//Wait for the rigth time to start motor
-		return LS_WAIT_FOR_ENGINE_START;
-	else
-	{
-		//Start Motor!
-		Log_AddNote("Motor Start");
-		if(motorPolarization)
-		{
-			Motor_StartForward();
-		}
-		else 
-		{
-			Motor_StartBackward();
-		}
+	//Wait for motor start
+
+	while (millis() < tMotorStartTime); //Wait for correct timing. Since it is important, do not loop through logic. wait for start
 		
-		return LS_WAIT_FOR_ENGINE_SHUTDOWN;
+	//Start Motor!
+	if(motorPolarization)
+	{
+		Motor_StartForward();
+	}
+	else 
+	{
+		Motor_StartBackward();
+	}
+		
+	return LS_WAIT_FOR_ENGINE_SHUTDOWN;
 	}
 }
 int lsMotorShutdown(int prevLogicState)
