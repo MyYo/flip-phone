@@ -1,12 +1,10 @@
-#include "Motor.h"
-#include "logger.h"
+#include "Driver_Motor.h"
 #include "Arduino.h"
 #include "HardwareConfiguration.h"
 
 void   Motor_Init ()
 {
     //Init pins as output
-    Log_AddNote("Initializing Motor");
     pinMode(PIN_MOTOR_PWM, OUTPUT);
     pinMode(PIN_MOTOR_INA, OUTPUT);
     pinMode(PIN_MOTOR_INB, OUTPUT);
@@ -19,7 +17,6 @@ void   Motor_Init ()
 //Make sure you call this function once, otherwise the motor will start-break cycle.
 void   Motor_StartForward ()
 {
-  Log_AddNote("Set Motor FW");
   digitalWrite(PIN_MOTOR_PWM, LOW); //Before changing direction turn off the motor
   digitalWrite(PIN_MOTOR_INA, HIGH);
   digitalWrite(PIN_MOTOR_INB, LOW);
@@ -30,7 +27,6 @@ void   Motor_StartForward ()
 //Make sure you call this function once, otherwise the motor will start-break cycle.
 void   Motor_StartBackward ()
 {
-  Log_AddNote("Set Motor BW");
   digitalWrite(PIN_MOTOR_PWM, LOW); //Before changing direction turn off the motor
   digitalWrite(PIN_MOTOR_INA, LOW);
   digitalWrite(PIN_MOTOR_INB, HIGH);
@@ -40,7 +36,6 @@ void   Motor_StartBackward ()
 //Make sure you call this function once, otherwise the motor will start-break cycle.
 void   Motor_Break ()
 {
-  Log_AddNote("Breaking Motor");
   digitalWrite(PIN_MOTOR_PWM, LOW); //Before changing direction turn off the motor
   digitalWrite(PIN_MOTOR_INA, LOW);
   digitalWrite(PIN_MOTOR_INB, LOW);

@@ -85,6 +85,7 @@ void   Dist_Test ()
   Dist_TestLogInit();
   Dist_Init();
   Dist_SetActiveDevice(DOWN_FACING_PING);
+  Dist_SetActiveDevice(UP_FACING_PING);
   
   float dataArray[2];
   while (true) //Loop forever
@@ -92,7 +93,7 @@ void   Dist_Test ()
     //Read dist and log values
     Log_SetTime(millis());
     Dist_Measure();
-	Dist_ExportData(dataArray[0], dataArray[1]);
+	  Dist_ExportData(dataArray[0], dataArray[1]);
     for(int i=0;i<2;i++)
       Log_SetData(i,dataArray[i]);
   

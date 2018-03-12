@@ -3,9 +3,9 @@
 #include "Driver_IMU.h"
 #include "Driver_Distance.h"
 #include "Driver_SafetyPin.h"
+#include "Driver_Motor.h"
 #include "OrientationPropagate.h"
 #include "ImpactForecast.h"
-#include "Motor.h"
 #include "HardwareConfiguration.h"
 
 //Timers
@@ -275,7 +275,6 @@ int lsMotorStart(int prevLogicState)
 	}
 		
 	return LS_WAIT_FOR_ENGINE_SHUTDOWN;
-	}
 }
 int lsMotorShutdown(int prevLogicState)
 {
