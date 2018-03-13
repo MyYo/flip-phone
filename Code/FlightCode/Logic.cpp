@@ -83,7 +83,7 @@ void RunLogic ()
 		prevState = currentState;
 		currentState = nextState;
 
-		while (millis() <= tCurrentTime + 10); //Each iteration has a minimal size
+		while (millis() < tCurrentTime + 10); //Each iteration has a minimal size
 	
 		loopI++;
 	}
@@ -286,7 +286,15 @@ int lsMotorShutdown(int prevLogicState)
 		{
 			//Impact Detected
 			Motor_Break(); //Stop Motor
+
 			Log_AddNote("Motor Break, Impact");
+
+			//Impact time & angle
+			double ang = IMU_GetZenitAngle(); //[deg]
+			tTimeOfImpact_T2_Actual = tCurrentTime;
+			Log_AddNote(" Actual T2-T0=" + String(tTimeOfImpact_T2_Actual - tFallDetectTime_T0) + "[msec]");
+			Log_AddNote(" Actual AngT2=" + String(ang) + "[deg]");
+
 			return LS_IMPACT;
 		}
 		else
@@ -306,6 +314,13 @@ int lsImpact (int prevLogicState)
 	IMU_Measure();
 	if (IMU_GetAccMag() > restoredGThresh) //[g]
 	{
+		if (prevLogicState != LS_IMPACT)
+		{
+			//In case we got here from state which is not the LS_IMPACT then impact time was already recorded
+			return LS_STAND_BY;
+		}
+
+		//Otherwise, record impact time etc
 		//Impact Detected
 		double ang = IMU_GetZenitAngle(); //[deg]
 		tTimeOfImpact_T2_Actual = tCurrentTime;
