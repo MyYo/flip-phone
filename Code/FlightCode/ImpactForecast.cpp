@@ -72,7 +72,7 @@ float x_from_b(float b)
 	return s2b + 1 - (s2b - b) / (1 - pow(e, -s2b));
 }
 
-#include "Motor.h"
+#include "Driver_Motor.h"
 unsigned long IMFO_WhenToStartMotor (unsigned predictedImpactTimeMs, float predictedZenitAngle) //Returns time to start motor, based on impact time and impact orientation. predictedZenitAngle is in [deg]
 {
 	return predictedImpactTimeMs;
