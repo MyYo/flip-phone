@@ -37,4 +37,9 @@ int lsImpact (int prevLogicState);
 int lsError(int prevLogicState);
 int lsDumpData(int prevLogicState);
 
+//Testers
+void ls_TestMomentOfInertia(); //This test runs the motor starting from the fall
+void ls_TestImpactTime();      //This test records distance to flour and impact time
+
+
 #endif

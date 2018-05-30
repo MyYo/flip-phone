@@ -30,6 +30,7 @@ void loop()
 #include "Driver_IMU.h"
 #include "Driver_Distance.h"
 #include "ImpactForecast.h"
+#include "Logic.h"
 
 void loop()
 {
@@ -45,10 +46,13 @@ void loop()
   //Log_Test();       //Passed for COM, SD 060317; Flash 120517
   //LED_Test();     //Passed 013018
   //IMU_Test();     //Passed 060317
-  Dist_Test();    //Passed 060317
+  //Dist_Test();    //Passed 060317
   //Or_Prop_Test(); //Written (072717) but Not Passed Yet
   //IMFO_Test();    //Passed ImpactTime 060417, Passed IMFO_WhenToStartMotor 022718
   //Motor_Test();     //Written (071917) but Not Passed Yet
+  //ls_TestMomentOfInertia(); //Tests moment of inertia by running the motor once fall is detected
+  ls_TestImpactTime(); //This test records distance to flour and impact time
+
 
   while (true);
 }

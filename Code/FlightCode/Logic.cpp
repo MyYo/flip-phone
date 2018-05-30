@@ -351,3 +351,188 @@ int lsDumpData(int prevLogicState)
 
 	return LS_STAND_BY; //Set next state to be standby, if plug is still not removed, logic will override and dump again
 }
+
+////Testers
+
+//This test runs the motor starting from the fall
+void ls_TestMomentOfInertia()
+{
+	//Initialization	
+	Log_Init();
+	IMU_Init();
+	Motor_Init();
+	SafetyPin_Init();
+
+	//Initiate Capacitor Voltage Indicator
+	pinMode(PIN_LED_VOLTAGE_OK_INDICATOR, OUTPUT);
+	digitalWrite(PIN_LED_VOLTAGE_OK_INDICATOR, LOW);	
+
+	//Wait until safety plug is removed
+	Log_SetLoigcState(1);
+	while(SafetyPin_IsConnected())
+	{
+		delay(500); //Wait a bit before inquiring again
+	}
+
+	//Wait untill falling is detected by IMU
+	Log_SetLoigcState(2);
+	do
+	{
+		delay(10);
+		IMU_Measure();
+	} while (IMU_GetAccMag() < freefallGThresh);
+
+	//Falling, wait to clear the 'hand'
+	Log_SetLoigcState(3);
+	delay(50);
+
+	//Measure Capacitor voltage level & Run motor
+	float v = Motor_MeasureMotorDriverInputVoltage();
+	Log_SetLoigcState(4);
+	Motor_StartForward(); // Run motor
+	delay(200);
+
+	//Let Motor Spin on Idle
+	Log_SetLoigcState(4);
+	digitalWrite(PIN_MOTOR_PWM, LOW); //Before changing direction turn off the motor
+	delay(200);
+
+	//Stop
+	Log_SetLoigcState(5);
+	Motor_Break();
+
+	//Broadcast back the voltage forever
+	while (true)
+	{
+		Serial.println(v);
+		delay(100);
+	}
+}
+
+//This test records distance to flour and impact time
+//How to use:
+//	Pull safety pin wait until LED change color to Red.
+//	Drop phone, while falling LED change color to Green.
+//  After impact, LED changes color to purple indicating a timer until another drop can take place
+//  Repeat after LED change color to Red
+//	To download Data out, plug safety pin (LED change color to blue), connect USB to Arduino to see the data dump
+void ls_TestImpactTime()
+{
+	//Data structure
+	const int nRangeDataPoints = 20;
+	const int nTrails = 20;
+	float rangeData[nRangeDataPoints][nTrails]; //m
+	float rangeTime[nRangeDataPoints][nTrails]; //msec
+	float impactTime[nTrails];
+
+	//Initialization
+	for (int i = 0; i < nRangeDataPoints; i++)
+	{
+		for (int j = 0; j < nTrails; j++)
+		{
+			rangeData[i][j] = 0;
+			rangeTime[i][j] = 0;
+			if (i == 0)
+				impactTime[j] = 0;
+		}
+	}
+	Log_Init();
+	IMU_Init();
+	Dist_Init();
+	SafetyPin_Init();
+	
+	int state = 1; //1 - standby, 2 - falling, 3 - print results
+	int nRangeDataPointI = 0;
+	int trailI = 0;
+	float tRef = 0;
+	while (true)
+	{
+		if (trailI >= nTrails)
+			state = 3; //No more room. just print results
+
+		Log_SetLoigcState(state);
+		switch (state)
+		{
+		case 1: //Standby
+			IMU_Measure();
+			if (IMU_GetAccMag() < freefallGThresh)
+			{
+				//Free falling state switch
+				state = 2;
+				nRangeDataPointI = 0;
+				tRef = ((float)micros()) / 1000.0;
+			}
+
+			if (SafetyPin_IsConnected())
+			{
+				//Safety pin connection detected
+				state = 3;
+				Log_SetLoigcState(state);
+				delay(500); //Wait a bit before inquiring again
+			}
+			break; 
+
+		case 2: //Free fall
+			if (nRangeDataPointI < nRangeDataPoints)
+			{
+				//We still have room, measure range
+				Dist_SetActiveDevice(DOWN_FACING_PING);
+				rangeTime[nRangeDataPointI][trailI] = ((float)micros()) / 1000.0 - tRef;
+				Dist_Measure(); //Measure distance 
+				rangeData[nRangeDataPointI][trailI] = Dist_GetDistance();
+				nRangeDataPointI++;
+			}
+
+			IMU_Measure();
+			if (IMU_GetAccMag() > restoredGThresh)
+			{
+				//Impact detected
+				impactTime[trailI] = ((float)micros()) / 1000.0 - tRef;
+
+				//Wait before doing anything else
+				Log_SetLoigcState(5);
+				delay(5000); //Wait a bit before inquiring again
+
+				//Now allow for a new fall
+				state = 1;
+				trailI++;
+			}
+
+			if (SafetyPin_IsConnected())
+			{
+				//Safety pin connection detected
+				state = 3;
+				Log_SetLoigcState(state);
+				delay(500); //Wait a bit before inquiring again
+			}
+			break;
+
+		case 3: //Print results / Dump data mode
+			if (!SafetyPin_IsConnected())
+			{
+				//Safety pin dis-connection detected
+				state = 1;
+				delay(500); //Wait a bit before inquiring again
+			}
+			
+			//Print all data that we have
+			Serial.println("Print All Data");
+			for (int j = 0; j < trailI; j++)
+			{
+				Serial.println("Trail " + String(j) + " Data");
+				Serial.println("t[msec]\tRange[m]");
+				for (int i = 0; i < nRangeDataPoints; i++)
+				{
+					Serial.print(rangeTime[i][j],3);
+					Serial.print("\t");
+					Serial.print(rangeData[i][j],4);
+					Serial.println();
+				}
+				Serial.println("Impact Time [msec]");
+				Serial.println(impactTime[j],3);
+			}
+			delay(2000); //Wait a bit before inquiring again
+		}
+	}
+}
+
