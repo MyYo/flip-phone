@@ -51,13 +51,13 @@ void  Dist_Measure()
 	pinMode(pinNumber, INPUT);
  
 	// finally, measure the length of the incoming pulse
-	pulseDuration=pulseIn(pinNumber, HIGH);
+	pulseDuration=pulseIn(pinNumber, HIGH); //pulse duration in microseconds
 
 	// divide the pulse length by half
 	pulseDuration=pulseDuration/2; 
  
 	// now convert to meters. We're metric here people...
-	currentDistance = ((float)(pulseDuration)/29.0)/100.0;
+	currentDistance = ((float)(pulseDuration)/29.0)/100.0; //Speed of sound is 1/(29*100) m/microsec
 }
 float  Dist_GetDistance() {return currentDistance;}
 void   Dist_ExportData(float &whichPing, float &currDist) //Export data for logging
