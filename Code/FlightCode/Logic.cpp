@@ -412,18 +412,23 @@ void ls_TestMomentOfInertia()
 //This test records distance to flour and impact time
 //How to use:
 //	Pull safety pin wait until LED change color to Red.
+//  When phone's angle is at the desiredAng (+- error) LED color will switch to yellow (flashing yellow-red)
 //	Drop phone, while falling LED change color to Green.
 //  After impact, LED changes color to purple indicating a timer until another drop can take place
 //  Repeat after LED change color to Red
 //	To download Data out, plug safety pin (LED change color to blue), connect USB to Arduino to see the data dump
+#include "quaternionFilters.h"
 void ls_TestImpactTime()
 {
 	//Data structure
 	const int nRangeDataPoints = 20;
-	const int nTrails = 20;
+	const int nTrails = 50;
 	float rangeData[nRangeDataPoints][nTrails]; //m
 	float rangeTime[nRangeDataPoints][nTrails]; //msec
 	float impactTime[nTrails];
+	float zenitAngles[nTrails];
+
+	const float desiredAng = 30; //Deg
 
 	//Initialization
 	for (int i = 0; i < nRangeDataPoints; i++)
@@ -445,6 +450,7 @@ void ls_TestImpactTime()
 	int nRangeDataPointI = 0;
 	int trailI = 0;
 	float tRef = 0;
+	float zenitAngle;
 	while (true)
 	{
 		if (trailI >= nTrails)
@@ -455,12 +461,25 @@ void ls_TestImpactTime()
 		{
 		case 1: //Standby
 			IMU_Measure();
+
+			//Compute Zenit Angle
+			float q1, q2, q3, q4;
+			IMU_GetOrientation(q1, q2, q3, q4); //Return current orientation IF->BF
+			zenitAngle = QtAngleToZenit(q1, q2, q3, q4); //[deg]
+
+			if (
+				(abs(zenitAngle - desiredAng) < 2) 
+				)
+				Log_SetLoigcState(8); //Indicate the phone is at the right angle
+
+			//Fall Detection
 			if (IMU_GetAccMag() < freefallGThresh)
 			{
 				//Free falling state switch
 				state = 2;
 				nRangeDataPointI = 0;
 				tRef = ((float)micros()) / 1000.0;
+				zenitAngles[trailI] = zenitAngle;
 			}
 
 			if (SafetyPin_IsConnected())
@@ -519,7 +538,14 @@ void ls_TestImpactTime()
 			Serial.println("Print All Data");
 			for (int j = 0; j < trailI; j++)
 			{
+				//Header
 				Serial.println("Trail " + String(j) + " Data");
+				
+				//Angle
+				Serial.print("ZenitAng[deg]\t");
+				Serial.println(zenitAngles[j],1);
+
+				//Distances
 				Serial.println("t[msec]\tRange[m]");
 				for (int i = 0; i < nRangeDataPoints; i++)
 				{
