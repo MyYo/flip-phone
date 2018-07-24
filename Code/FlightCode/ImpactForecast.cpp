@@ -97,9 +97,9 @@ unsigned long IMFO_WhenToStartMotor (unsigned predictedImpactTimeMs, float predi
 	return predictedImpactTimeMs;
 
 	//Measured constants, see presentation for details
-	const float E = 271; //[rad/sec]
+	const float E = 266.9; //[rad/sec]
 	float Vin = Motor_MeasureMotorDriverInputVoltage(); //[V]. Default value 5.75
-	const float tc = 0.3115; //[sec]
+	const float tc = 0.3235; //[sec]
 	const float r = 20; //Unitless
 
 	float theta = abs(predictedZenitAngle) * PI / 180;

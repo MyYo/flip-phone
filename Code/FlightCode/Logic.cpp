@@ -357,6 +357,20 @@ int lsDumpData(int prevLogicState)
 //This test runs the motor starting from the fall
 void ls_TestMomentOfInertia()
 {
+	//Parameters and calculation of expected ms per revolution
+	//Motor Parameters
+	const double E = 266.9; //rad/secV
+	const int tc = 323.5; //msec
+	const float J = 6.304e-6; //kgm^2, wheels moment of inertia
+	const float Iyy = 1.164e5; //gmm^2, phone's moment of inertia
+	const float r = (Iyy*1e-9) / J; //Should be smaller then 46 when phone is loaded on the case
+	//How long to run motor
+	const int tOn = 200; //msec
+	float eRatio = ((float)(tOn)) / ((float)(tc));
+	float eRatio2 = eRatio*eRatio;
+	float eRatio4 = eRatio2 * eRatio2;
+	float const expVal = 1.0 - eRatio + 1.0 / 2.0 * eRatio2 - 1.0 / 6.0 * eRatio2*eRatio + 1.0 / 24.0 * eRatio4 - 1/120.0 * eRatio4*eRatio;
+
 	//Initialization	
 	Log_Init();
 	IMU_Init();
@@ -371,6 +385,18 @@ void ls_TestMomentOfInertia()
 	Log_SetLoigcState(1);
 	while(SafetyPin_IsConnected())
 	{
+		//Measure Voltage and present to user
+		float v = Motor_MeasureMotorDriverInputVoltage();
+		if (v > 5.5)
+		{
+			//Turn LED on if voltage is ok
+			digitalWrite(PIN_LED_VOLTAGE_OK_INDICATOR, HIGH);
+		}
+		else
+		{
+			digitalWrite(PIN_LED_VOLTAGE_OK_INDICATOR, LOW);
+		}
+
 		delay(500); //Wait a bit before inquiring again
 	}
 
@@ -380,7 +406,7 @@ void ls_TestMomentOfInertia()
 	{
 		delay(10);
 		IMU_Measure();
-	} while (IMU_GetAccMag() < freefallGThresh);
+	} while (IMU_GetAccMag() > freefallGThresh);
 
 	//Falling, wait to clear the 'hand'
 	Log_SetLoigcState(3);
@@ -388,23 +414,30 @@ void ls_TestMomentOfInertia()
 
 	//Measure Capacitor voltage level & Run motor
 	float v = Motor_MeasureMotorDriverInputVoltage();
+
+	float omegaFinal = v*E*(1.0 - expVal)/r;
+	float predictedTFlip = 2.0 * 3.141 / omegaFinal*1e3; //msec
 	Log_SetLoigcState(4);
 	Motor_StartForward(); // Run motor
-	delay(200);
+	delay(tOn);
 
 	//Let Motor Spin on Idle
-	Log_SetLoigcState(4);
-	digitalWrite(PIN_MOTOR_PWM, LOW); //Before changing direction turn off the motor
-	delay(200);
+	Log_SetLoigcState(5);
+	digitalWrite(PIN_MOTOR_PWM, LOW); //Motor spins on idel (no power provided)
+	delay(500);
 
 	//Stop
-	Log_SetLoigcState(5);
+	Log_SetLoigcState(6);
 	Motor_Break();
 
 	//Broadcast back the voltage forever
 	while (true)
 	{
-		Serial.println(v);
+		Serial.print("v=");
+		Serial.print(v);
+		Serial.print("[V], tToFlip=");
+		Serial.print(predictedTFlip);
+		Serial.println("[msec]");
 		delay(100);
 	}
 }
