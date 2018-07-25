@@ -16,7 +16,7 @@
 //Safety and debug
 #define PIN_SAFETY_PLUG_SOURCE 5 
 #define PIN_SAFETY_PLUG_TERMINAL 6
-#define PIN_CAPACITOR_VOLTAGE A0		//Power meeter pin. Measuring voltage on capacitor
+#define PIN_CAPACITOR_VOLTAGE A5		//Power meeter pin. Measuring voltage on capacitor
 #define PIN_LED_VOLTAGE_OK_INDICATOR 13 //When LED is on voltage is OK
 
 //Logging
