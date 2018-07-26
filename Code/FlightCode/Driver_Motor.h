@@ -9,5 +9,6 @@ void   Motor_Break ();          //Make sure you call this function once, otherwi
 float Motor_MeasureMotorDriverInputVoltage(); //Returns the motor driver input voltage (capacitor voltage)
 
 void   Motor_Test (); //Tester function
+void   Motor_TestMeasureCapacitorDriverInputVoltage();
 
 #endif

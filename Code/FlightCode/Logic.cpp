@@ -435,7 +435,7 @@ void ls_TestMomentOfInertia()
 	{
 		Serial.print("v=");
 		Serial.print(v);
-		Serial.print("[V], tToFlip=");
+		Serial.print("[V], tToFlip At Steady State=");
 		Serial.print(predictedTFlip);
 		Serial.println("[msec]");
 		delay(100);

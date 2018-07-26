@@ -51,15 +51,27 @@ float Motor_MeasureMotorDriverInputVoltage()
 	return analogValue * devider;
 }
 
-void   Motor_Test () //Tester function
+void Motor_Test () //Tester function
 {
-	//Start and stop motor
+  //Start and stop motor
   Motor_Init();
   delay(500);
   Motor_StartForward();
-  delay(500);
+  delay(300);
   Motor_Break();
   delay(500);
   Motor_StartBackward();
   delay(500);
+}
+
+void Motor_TestMeasureCapacitorDriverInputVoltage() //Tester function
+{
+	//Continuesly measure voltage and output it
+	while (true)
+	{
+		Serial.print("Capacitor Voltage: ");
+		Serial.print(Motor_MeasureMotorDriverInputVoltage());
+		Serial.println(" [V]");
+		delay(500);
+	}
 }

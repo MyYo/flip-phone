@@ -50,6 +50,7 @@ void loop()
   //Or_Prop_Test(); //Written (072717) but Not Passed Yet
   //IMFO_Test();    //Passed ImpactTime 060417, Passed IMFO_WhenToStartMotor 022718
   //Motor_Test();     //Written (071917) but Not Passed Yet
+  //Motor_TestMeasureCapacitorDriverInputVoltage();
   ls_TestMomentOfInertia(); //Tests moment of inertia by running the motor once fall is detected
   //ls_TestImpactTime(); //This test records distance to flour and impact time
 
