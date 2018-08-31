@@ -36,7 +36,7 @@ void loop()
 {
   Log_Init();
   //Blink before starting tests
-  for (int i=0;i<4;i++)
+  for (int i=0;i<8;i++)
   {
     Log_SetLoigcState(i);
     delay(500);
@@ -48,10 +48,10 @@ void loop()
   //IMU_Test();     //Passed 060317
   //Dist_Test();    //Passed 060317
   //Or_Prop_Test(); //Written (072717) but Not Passed Yet
-  //IMFO_Test();    //Passed ImpactTime 060417, Passed IMFO_WhenToStartMotor 022718
+  IMFO_Test();    //Passed ImpactTime 060417, Passed IMFO_WhenToStartMotor 022718
   //Motor_Test();     //Written (071917) but Not Passed Yet
   //Motor_TestMeasureCapacitorDriverInputVoltage();
-  ls_TestMomentOfInertia(); //Tests moment of inertia by running the motor once fall is detected
+  //ls_TestMomentOfInertia(); //Tests moment of inertia by running the motor once fall is detected
   //ls_TestImpactTime(); //This test records distance to flour and impact time
 
 
