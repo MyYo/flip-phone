@@ -19,6 +19,13 @@
 #define PIN_CAPACITOR_VOLTAGE A5		//Power meeter pin. Measuring voltage on capacitor
 #define PIN_LED_VOLTAGE_OK_INDICATOR 13 //When LED is on voltage is OK
 
+//Motor - Mechanical
+#define WHEEL_CASE_RATIO_R 18.465         //[Unitless] Set to:
+										  //	- Only case: 18.465
+										  //    - Case with phone: 
+#define MOTOR_PARAMETER_E  266.9          //[rad/secV]
+#define MOTOR_PARAMETER_TC (323.5/1000.0) //[sec]
+
 //Logging
 #define LOG_USING_CACHE //When defined, log will also be cashed and written upon closure.
 #endif

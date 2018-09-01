@@ -1,5 +1,6 @@
 #include "ImpactForecast.h"
 #include "Logger.h"
+#include "HardwareConfiguration.h"
 
 float t[MAX_NUMBER_DIST_MEASURMENTS]; //[sec]
 float h[MAX_NUMBER_DIST_MEASURMENTS]; //[m]
@@ -366,10 +367,10 @@ unsigned long IMFO_WhenToStartMotor(unsigned predictedImpactTimeMs, float predic
 	return predictedImpactTimeMs;
 
 	//Measured constants, see presentation for details
-	const float E = 266.9; //[rad/sec]
+	const float E = MOTOR_PARAMETER_E; //[rad/sec]
 	float Vin = Motor_MeasureMotorDriverInputVoltage(); //[V]. Default value 5.75
-	const float tc = 0.3235; //[sec]
-	const float r = 20; //Unitless
+	const float tc = MOTOR_PARAMETER_TC; //[sec]
+	const float r = WHEEL_CASE_RATIO_R; //Unitless
 
 	float theta = abs(predictedZenitAngle) * PI / 180;
 	float b = theta*r / (tc*E*Vin);

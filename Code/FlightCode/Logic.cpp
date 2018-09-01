@@ -359,8 +359,8 @@ void ls_TestMomentOfInertia()
 {
 	//Parameters and calculation of expected ms per revolution
 	//Motor Parameters
-	const double E = 266.9; //rad/secV
-	const int tc = 323.5; //msec
+	const double E = MOTOR_PARAMETER_E; //rad/secV
+	const int tc = MOTOR_PARAMETER_TC*1000.0; //msec
 	const float J = 6.304e-6; //kgm^2, wheels moment of inertia
 	const float Iyy = 1.164e5; //gmm^2, phone's moment of inertia
 	const float r = (Iyy*1e-9) / J; //Should be smaller then 46 when phone is loaded on the case
