@@ -181,7 +181,9 @@ unsigned long IMFO_PredictTimeofImpact ()
 	}
 	e2 = e2 / (float(N));
 
-	if (N < 3)
+	if (N < 3 || //Too few measurments
+		N < numberOfMeasurments/2 //Too many measurments were bad, something is wrong.
+		)
 	{
 		Log_AddNote("Number of good measurments too low");
 		return 0;
