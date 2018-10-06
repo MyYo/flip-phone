@@ -7,8 +7,8 @@
 //#define PIN_SD_CHIP_SELECT   8	 //SDCard Port CS 
 #define PIN_PING_DOWNFACING  A1  //Ping Port SIG
 #define PIN_PING_UPFACING    A2  //Ping Port SIG
-#define PIN_I2C_SCL		     A5	 //Used by IMU
-#define PIN_I2C_SDA		     A4	 //Used by IMU
+#define PIN_I2C_SCL		     32	 //Used by IMU
+#define PIN_I2C_SDA		     31	 //Used by IMU
 #define PIN_MOTOR_INA  11  //Motor
 #define PIN_MOTOR_PWM  10  //Motor
 #define PIN_MOTOR_INB   9  //Motor

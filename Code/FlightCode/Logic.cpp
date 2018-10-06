@@ -77,7 +77,18 @@ void RunLogic ()
 		logicGatherData();
 		if (nextState != currentState)
 			Log_AddNote("State Changed");
-		Log_WriteLine();
+
+		bool isWriteToLog = true;
+		if (currentState == LS_STAND_BY && nextState == LS_STAND_BY)
+		{
+			//Both current and next states are Standby, so don't bother logging
+			isWriteToLog = false;
+		}
+			
+		if (isWriteToLog)
+		{
+			Log_WriteLine();
+		}
 
 		//Change logic state
 		prevState = currentState;
@@ -131,10 +142,10 @@ void logicGatherData ()
 
 int lsBootUp(int prevLogicState)
 {
+
 	if (prevLogicState == LS_OFF)
 	{
 		//Run only from off state
-
 		Log_Init();
 		Log_DefineNextField("IterLen", "msec"); //Iteration length
 		Log_DefineNextField("AccMag", "g");
@@ -160,12 +171,11 @@ int lsBootUp(int prevLogicState)
 	}
 
 	//Wait until safety plug is removed
-	if (SafetyPin_IsConnected())
+	while (SafetyPin_IsConnected())
 	{
 		delay(500); //Wait a bit before inquiring again
-		return LS_BOOT_UP;
 	}
-	
+
 	//Wait a bit before changing to the next state
 	delay(1000);
 	return LS_STAND_BY;

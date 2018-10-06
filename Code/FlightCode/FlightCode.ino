@@ -9,7 +9,7 @@
 #include "HardwareConfiguration.h"
 #include "Logger.h"
 
-//#define IS_RUN_OPERATIONAL //Comment out if you would like to run tests only
+#define IS_RUN_OPERATIONAL //Comment out if you would like to run tests only
 
 void setup()
 {
@@ -46,12 +46,12 @@ void loop()
   //Testers (uncomment if needed)
   //Log_Test();       //Passed for COM, SD 060317; Flash 120517
   //LED_Test();     //Passed 013018
-  //IMU_Test();     //Passed 060317
+  IMU_Test();     //Passed 060317
   //Dist_Test();    //Passed 060317
   //Or_Prop_Test(); //Written (072717) but Not Passed Yet
   //IMFO_Test();    //Passed ImpactTime 060417, Passed IMFO_WhenToStartMotor 022718
   //Motor_Test();     //Written (071917) but Not Passed Yet
-  Motor_TestMeasureCapacitorDriverInputVoltage();
+  //Motor_TestMeasureCapacitorDriverInputVoltage();
   //ls_TestMomentOfInertia(); //Tests moment of inertia by running the motor once fall is detected
   //ls_TestImpactTime(); //This test records distance to flour and impact time
 
