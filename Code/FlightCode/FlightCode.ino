@@ -9,7 +9,7 @@
 #include "HardwareConfiguration.h"
 #include "Logger.h"
 
-//#define IS_RUN_OPERATIONAL //Comment out if you would like to run tests only
+#define IS_RUN_OPERATIONAL //Comment out if you would like to run tests only
 
 void setup()
 {
